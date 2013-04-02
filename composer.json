@@ -1,0 +1,26 @@
+{
+    "name": "lilweb/job-bundle",
+    "type": "symfony-bundle",
+    "description": "Bundle abstracting jobs and tasks",
+    "keywords": ["abstraction", "job"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name" : "Geoffrey BRIER",
+            "email": "geoffrey.brier@gmail.com"
+        },
+        {
+            "name" : "Michiel Missotten",
+            "email": "michiel@lil-web.fr"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.0",
+        "symfony/symfony": "2.1.*",
+        "symfony/monolog-bundle": "2.1.*"
+    },
+    "autoload": {
+        "psr-0": { "Lilweb\\JobBundle": "" }
+    },
+    "target-dir": "Lilweb/JobBundle"
+}

@@ -1,0 +1,33 @@
+parameters:
+   job_scheduler.class: Lilweb\JobBundle\Command\JobSchedulerCommand
+   task_ordonancer.class: Lilweb\JobBundle\Command\TaskOrdonancerCommand
+   job_resolver.class: Lilweb\JobBundle\Services\JobResolver
+   abstract_task.class: Lilweb\JobBundle\Services\AbstractTaskService
+
+services:
+    # TODO/Bug: Argument non pris en compte pour les commandes, de ce fait on ne peut pas
+    # utiliser le channel des logs ...
+    lilweb.commands.job_scheduler:
+        class: %job_scheduler.class%
+        arguments: [ "@logger" ]
+        tags:
+            - { name: monolog.logger, channel: jobs }
+
+    lilweb.commands.task_ordonancer:
+        class: %task_ordonancer.class%
+        arguments: [ "@logger" ]
+        tags:
+            - { name: monolog.logger, channel: jobs }
+
+    lilweb.job_resolver:
+        class: %job_resolver.class%
+        arguments: [ "@logger", %lilweb_job_bundle.job_file% ]
+        tags:
+            - { name: monolog.logger, channel: jobs }
+
+    lilweb.abstract_task:
+        class: %abstract_task.class%
+        abstract: true
+        arguments: [ "@doctrine.orm.entity_manager", "@logger" ]
+        tags:
+            - { name: monolog.logger, channel: jobs }

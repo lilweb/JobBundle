@@ -1,0 +1,190 @@
+<?php
+/**
+ * User: Geoffrey Brier
+ * Date: 18/03/13
+ * Time: 14:32
+ */
+namespace Lilweb\JobBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+
+/**
+ * @ORM\Entity
+ * @ORM\Table(name = "job_infos")
+ */
+class JobInfo
+{
+    /**
+     * @ORM\Id
+     * @ORM\Column(type = "integer")
+     * @ORM\GeneratedValue
+     */
+    private $id;
+
+    /**
+     * @var string Name of the task.
+     *
+     * @ORM\Column(
+     *     type   = "string",
+     *     length = 255,
+     *     name   = "job_name"
+     * )
+     */
+    private $name;
+
+    /**
+     * @var \Doctrine\Common\Collections\ArrayCollection
+     *
+     * @ORM\OneToMany(
+     *     targetEntity = "\Lilweb\JobBundle\Entity\TaskInfo",
+     *     mappedBy     = "jobInfo",
+     *     cascade      = { "persist", "remove" }
+     * )
+     */
+    private $taskInfos;
+
+    /**
+     * @var string Name of the person who's run the job.
+     *
+     * @ORM\Column(
+     *     type   = "string",
+     *     length = 255,
+     *     name   = "job_runner"
+     * )
+     */
+    private $jobRunner;
+
+    /**
+     * @var \DateTime The date the at which the task began.
+     *
+     * @ORM\Column(
+     *     type     = "datetime",
+     *     nullable = true,
+     *     name     = "execution_date"
+     * )
+     */
+    private $executionDate;
+
+    /**
+     * @var \DateTime The date
+     *
+     * @ORM\Column(
+     *     type     = "datetime",
+     *     name     = "last_status_update_date"
+     * )
+     */
+    private $lastStatusUpdateDate;
+
+    /**
+     * Constructor.
+     */
+    public function __construct()
+    {
+        $this->taskInfos = new ArrayCollection();
+    }
+
+    /**
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * @param string $name The job name.
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+    }
+
+    /**
+     * @return \Doctrine\Common\Collections\ArrayCollection
+     */
+    public function getTaskInfos()
+    {
+        return $this->taskInfos;
+    }
+
+    /**
+     * @param array|\Doctrine\Common\Collections\ArrayCollection $taskInfos
+     */
+    public function setTaskInfos($taskInfos)
+    {
+        $this->taskInfos->clear();
+
+        foreach ($taskInfos as $taskInfo) {
+            $this->addTaskInfo($taskInfo);
+        }
+    }
+
+    /**
+     * @param \Lilweb\JobBundle\Entity\TaskInfo $taskInfo
+     */
+    public function addTaskInfo(TaskInfo $taskInfo)
+    {
+        $this->taskInfos[] = $taskInfo;
+
+        if ($taskInfo->getJobInfo() !== $this) {
+            $taskInfo->setJobInfo($this);
+        }
+    }
+
+    /**
+     * @return string
+     */
+    public function getJobRunner()
+    {
+        return $this->jobRunner;
+    }
+
+    /**
+     * @param string $jobRunner
+     */
+    public function setJobRunner($jobRunner)
+    {
+        $this->jobRunner = $jobRunner;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getExecutionDate()
+    {
+        return $this->executionDate;
+    }
+
+    /**
+     * @param \DateTime $executionDate
+     */
+    public function setExecutionDate(\DateTime $executionDate)
+    {
+        $this->executionDate = $executionDate;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getLastStatusUpdateDate()
+    {
+        return $this->lastStatusUpdateDate;
+    }
+
+    /**
+     * @param \DateTime $lastStatusUpdateDate
+     */
+    public function setLastStatusUpdateDate(\DateTime $lastStatusUpdateDate)
+    {
+        $this->lastStatusUpdateDate = $lastStatusUpdateDate;
+    }
+}

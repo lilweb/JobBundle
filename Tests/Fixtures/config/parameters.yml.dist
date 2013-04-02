@@ -1,0 +1,2 @@
+parameters:
+    monolog.file_path: ~

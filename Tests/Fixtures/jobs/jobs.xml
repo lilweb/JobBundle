@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<config>
+    <tasks>
+        <task name="import:csv" service-id="lilweb.import_csv">
+            <max-parallel-execution value="2" />
+        </task>
+        <task name="export:ftp" service-id="lilweb.export_ftp">
+        </task>
+    </tasks>
+    <jobs>
+        <job name="besoin:all" schedulable="true">
+            <task name="import:csv" />
+            <task name="export:ftp" />
+        </job>
+    </jobs>
+</config>

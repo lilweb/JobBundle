@@ -1,0 +1,11 @@
+imports:
+  - { resource: parameters.yml }
+
+monolog:
+    handlers:
+        job_handler:
+            type: stream
+            path: %monolog.file_path%
+            bubble: false
+            level: CRITICAL
+            channels: jobs
