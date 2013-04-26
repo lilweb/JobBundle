@@ -32,6 +32,7 @@ class Task
      * Constructor.
      *
      * @param \DOMElement $element The XML element.
+     * @throws \Exception
      */
     public function __construct(\DOMElement $element)
     {
