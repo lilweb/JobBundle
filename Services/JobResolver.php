@@ -171,10 +171,7 @@ class JobResolver
 
         foreach ($elements as $element) {
             if ($element instanceof \DOMElement) {
-                $trigger = new Trigger();
-                $trigger->setName($element->getAttribute('name'));
-                $trigger->setIdService($element->getAttribute('id-service'));
-                $trigger->setTriggers($element->getAttribute('triggers'));
+                $trigger = new Trigger($element);
 
                 $this->triggers[$trigger->getName()] = $trigger;
             }

@@ -6,7 +6,9 @@ parameters:
    task_scheduler.class: Lilweb\JobBundle\Services\TaskScheduler
    job_scheduler.class: Lilweb\JobBundle\Services\JobScheduler
 
+   trigger_manager.class: Lilweb\JobBundle\Trigger\TriggerManager
    abstract_task.class: Lilweb\JobBundle\Services\AbstractTaskService
+
 
 services:
 
@@ -32,6 +34,13 @@ services:
         class: %task_scheduler.class%
         arguments: [ "@service_container", "@logger" ]
         tags:
+            - { name: monolog.logger, channel: jobs }
+
+
+    lilweb.trigger_manager:
+        class: %trigger_manager.class%
+        arguments: [ "@service_container", "@logger" ]
+        tag:
             - { name: monolog.logger, channel: jobs }
 
 

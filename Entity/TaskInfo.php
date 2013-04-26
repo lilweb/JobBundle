@@ -132,6 +132,7 @@ class TaskInfo
 
     /**
      * @param integer $status
+     * @throws \InvalidArgumentException
      */
     public function setStatus($status)
     {

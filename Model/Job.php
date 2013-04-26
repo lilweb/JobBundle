@@ -22,7 +22,7 @@ class Job
     private $name;
 
     /** @var boolean  */
-    private $schedulable;
+    private $schedule;
 
     /**
      * Constructor.
@@ -44,7 +44,8 @@ class Job
         $this->schedulable = false;
         $this->tasks = new ArrayCollection();
 
-        if ($element->hasAttribute('schedulable') && $element->getAttribute('schedulable') === 'true') {
+        if ($element->hasAttribute('schedule')) {
+
             $this->schedulable = true;
         }
 

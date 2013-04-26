@@ -10,19 +10,11 @@ use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-use Lilweb\JobBundle\Entity\JobInfo;
-use Lilweb\JobBundle\Entity\TaskInfo;
-
 /**
  * Commande qui va plannifier les jobs.
  */
 class JobTriggerCommand extends ContainerAwareCommand
 {
-    /**
-     * @var \Monolog\Logger
-     */
-    private $logger;
-
     /**
      * {@inheritdoc}
      */
@@ -38,35 +30,6 @@ class JobTriggerCommand extends ContainerAwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-//        // For each job, create a JobInfo and TaskInfo row
-//        $this->logger = $this->getContainer()->get('logger');
-//        $this->logger->debug('Début de la plannification des jobs');
-//        $cpt = 0;
-//        $em = $this->getContainer()->get('doctrine.orm.entity_manager');
-//        $jobs = $this->getContainer()->get('lilweb.job_resolver')->getJobs();
-//
-//        foreach ($jobs as $job) {
-//            if ($job->isSchedulable()) {
-//                $this->logger->debug('Plannification du job: '.$job->getName());
-//                $task = $job->getTasks()->first();
-//
-//                $taskInfo = new TaskInfo();
-//                $taskInfo->setName($task->getName());
-//                $taskInfo->setStatus(TaskInfo::TASK_WAITING);
-//
-//                $jobInfo = new JobInfo();
-//                $jobInfo->setJobRunner('cron');
-//                $jobInfo->setName($job->getName());
-//                $jobInfo->addTaskInfo($taskInfo);
-//                $jobInfo->setLastStatusUpdateDate(new \DateTime());
-//
-//                $em->persist($jobInfo);
-//                $cpt++;
-//            }
-//        }
-//
-//        $em->flush();
-//        $this->logger->debug('Nombre de job planifiés: '.$cpt);
-//        $this->logger->debug('Fin de la plannification des jobs');
+        $this->getContainer()->get('lilweb.trigger_manager')->checkAll();
     }
 }
