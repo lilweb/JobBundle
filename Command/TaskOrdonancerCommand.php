@@ -28,8 +28,8 @@ class TaskOrdonancerCommand extends ContainerAwareCommand
     protected function configure()
     {
         $this
-            ->setName('lilweb:tasks:execute')
-            ->setDescription('Execute une tache.');
+            ->setName('lilweb:job:execute')
+            ->setDescription("Lance l'execution d'un job");
     }
 
     /**

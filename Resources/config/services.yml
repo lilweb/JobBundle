@@ -3,6 +3,7 @@ parameters:
    task_ordonancer.class: Lilweb\JobBundle\Command\TaskOrdonancerCommand
    job_resolver.class: Lilweb\JobBundle\Services\JobResolver
    abstract_task.class: Lilweb\JobBundle\Services\AbstractTaskService
+   job_trigger_manager.class:  Lilweb\JobBundle\Services\JobTriggerManager
 
 services:
     # TODO/Bug: Argument non pris en compte pour les commandes, de ce fait on ne peut pas
@@ -24,6 +25,10 @@ services:
         arguments: [ "@logger", %lilweb_job_bundle.job_file% ]
         tags:
             - { name: monolog.logger, channel: jobs }
+
+    lilweb.job_trigger_manager:
+        class: %job_trigger_manager.class%
+
 
     lilweb.abstract_task:
         class: %abstract_task.class%

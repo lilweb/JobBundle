@@ -87,7 +87,11 @@ class JobResolver
     }
 
     /**
+     * Chargement de la liste des taches à partir d'un noeud XML.
+     *
      * @param \DOMNodeList $elements
+     *
+     * @throws \Exception
      */
     private function loadTasks(\DOMNodeList $elements)
     {
@@ -110,6 +114,8 @@ class JobResolver
 
     /**
      * @param \DOMNodeList $elements
+     *
+     * @throws \Exception
      */
     private function loadJobs(\DOMNodeList $elements)
     {
