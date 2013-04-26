@@ -28,6 +28,8 @@ class Job
      * Constructor.
      *
      * @param \DOMElement $element The XML element.
+     * @param \Doctrine\Common\Collections\ArrayCollection $tasks
+     * @throws \Exception
      */
     public function __construct(\DOMElement $element, ArrayCollection $tasks)
     {
@@ -45,8 +47,7 @@ class Job
         $this->tasks = new ArrayCollection();
 
         if ($element->hasAttribute('schedule')) {
-
-            $this->schedulable = true;
+            $this->schedule = $element->getAttribute('schedule');
         }
 
         foreach ($elements as $el) {
@@ -66,10 +67,11 @@ class Job
     }
 
     /**
-     * Adds a tasks.
+     * Adds a task.
      *
-     * @param integer                           $offset The position of the task
+     * @param integer                      $offset The position of the task
      * @param \Lilweb\JobBundle\Model\Task $task   The task to add.
+     * @throws \Exception
      */
     public function addTaskAtOffset($offset, Task $task)
     {
@@ -78,22 +80,6 @@ class Job
         }
 
         $this->tasks->set($offset, $task);
-    }
-
-    /**
-     * @return \Doctrine\Common\Collections\ArrayCollection
-     */
-    public function getTasks()
-    {
-        return $this->tasks;
-    }
-
-    /**
-     * @return string
-     */
-    public function getName()
-    {
-        return $this->name;
     }
 
     /**
@@ -117,10 +103,26 @@ class Job
     }
 
     /**
+     * @return \Doctrine\Common\Collections\ArrayCollection
+     */
+    public function getTasks()
+    {
+        return $this->tasks;
+    }
+
+    /**
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
      * @return boolean
      */
-    public function isSchedulable()
+    public function getSchedule()
     {
-        return $this->schedulable;
+        return $this->schedule;
     }
 }

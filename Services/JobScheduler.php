@@ -9,6 +9,11 @@ namespace Lilweb\JobBundle\Services;
 use Doctrine\ORM\EntityManager;
 use Monolog\Logger;
 
+use Cron;
+
+use Lilweb\JobBundle\Entity\TaskInfo;
+use Lilweb\JobBundle\Entity\JobInfo;
+
 /**
  * Planifie les jobs.
  */
@@ -42,30 +47,35 @@ class JobScheduler
     /**
      * Planifie tout les jobs.
      */
-    public function execute()
+    public function checkAll()
     {
         // For each job, create a JobInfo and TaskInfo row
-        $this->logger->debug('Début de la plannification des jobs');
+        $this->logger->debug('Début de la vérification du lancement des jobs');
+
         $cpt = 0;
         $jobs = $this->jobResolver->getJobs();
 
         foreach ($jobs as $job) {
-            if ($job->isSchedulable()) {
-                $this->logger->debug('Plannification du job: '.$job->getName());
-                $task = $job->getTasks()->first();
+            if ($job->getSchedule() != '') {
+                $cron = Cron\CronExpression::factory($job->getSchedule());
 
-                $taskInfo = new TaskInfo();
-                $taskInfo->setName($task->getName());
-                $taskInfo->setStatus(TaskInfo::TASK_WAITING);
+                if ($cron->isDue()) {
+                    $this->logger->debug('CRON match - plannification du job: '.$job->getName());
+                    $task = $job->getTasks()->first();
 
-                $jobInfo = new JobInfo();
-                $jobInfo->setJobRunner('cron');
-                $jobInfo->setName($job->getName());
-                $jobInfo->addTaskInfo($taskInfo);
-                $jobInfo->setLastStatusUpdateDate(new \DateTime());
+                    $taskInfo = new TaskInfo();
+                    $taskInfo->setName($task->getName());
+                    $taskInfo->setStatus(TaskInfo::TASK_WAITING);
 
-                $this->em->persist($jobInfo);
-                $cpt++;
+                    $jobInfo = new JobInfo();
+                    $jobInfo->setJobRunner('cron');
+                    $jobInfo->setName($job->getName());
+                    $jobInfo->addTaskInfo($taskInfo);
+                    $jobInfo->setLastStatusUpdateDate(new \DateTime());
+
+                    $this->em->persist($jobInfo);
+                    $cpt++;
+                }
             }
         }
 

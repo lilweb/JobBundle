@@ -35,6 +35,6 @@ class JobSchedulerCommand extends ContainerAwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->getContainer('lilweb.job_scheduler')->execute();
+        $this->getContainer()->get('lilweb.job_scheduler')->checkAll();
     }
 }

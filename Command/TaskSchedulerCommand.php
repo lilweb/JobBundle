@@ -32,6 +32,6 @@ class TaskSchedulerCommand extends ContainerAwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->get('lilweb.task_scheduler')->execute();
+        $this->getContainer()->get('lilweb.task_scheduler')->execute();
     }
 }

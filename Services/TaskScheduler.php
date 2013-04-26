@@ -9,6 +9,9 @@ namespace Lilweb\JobBundle\Services;
 use Monolog\Logger;
 use Symfony\Component\DependencyInjection\Container;
 
+use Lilweb\JobBundle\Entity\TaskInfo;
+use Lilweb\JobBundle\Entity\JobInfo;
+
 /**
  * C'est cette classe qui s'occupe de l'ordonnancement des différentes taches.
  */
@@ -43,6 +46,10 @@ class TaskScheduler
 
         $jobResolver = $this->container->get('lilweb.job_resolver');
         $em = $this->container->get('doctrine.orm.entity_manager');
+
+        // Check the triggers & CRON expressions
+        $this->container->get('lilweb.trigger_manager')->checkAll();
+        $this->container->get('lilweb.job_scheduler')->checkAll();
 
         // Go through all tasks to know whether or not one can be executed
         $tasks = $jobResolver->getTasks();
