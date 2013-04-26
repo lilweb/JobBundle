@@ -1,24 +1,18 @@
 parameters:
-   job_scheduler.class: Lilweb\JobBundle\Command\JobSchedulerCommand
-   task_ordonancer.class: Lilweb\JobBundle\Command\TaskOrdonancerCommand
+   command_job_scheduler.class: Lilweb\JobBundle\Command\JobSchedulerCommand
+   command_task_scheduler.class: Lilweb\JobBundle\Command\TaskSchedulerCommand
+
    job_resolver.class: Lilweb\JobBundle\Services\JobResolver
+   task_scheduler.class: Lilweb\JobBundle\Services\TaskScheduler
+   job_scheduler.class: Lilweb\JobBundle\Services\JobScheduler
+
    abstract_task.class: Lilweb\JobBundle\Services\AbstractTaskService
-   job_trigger_manager.class:  Lilweb\JobBundle\Services\JobTriggerManager
 
 services:
-    # TODO/Bug: Argument non pris en compte pour les commandes, de ce fait on ne peut pas
-    # utiliser le channel des logs ...
-    lilweb.commands.job_scheduler:
-        class: %job_scheduler.class%
-        arguments: [ "@logger" ]
-        tags:
-            - { name: monolog.logger, channel: jobs }
 
-    lilweb.commands.task_ordonancer:
-        class: %task_ordonancer.class%
-        arguments: [ "@logger" ]
-        tags:
-            - { name: monolog.logger, channel: jobs }
+    #
+    # Les differents services.
+    #
 
     lilweb.job_resolver:
         class: %job_resolver.class%
@@ -26,9 +20,24 @@ services:
         tags:
             - { name: monolog.logger, channel: jobs }
 
-    lilweb.job_trigger_manager:
-        class: %job_trigger_manager.class%
 
+    lilweb.job_scheduler:
+        class: %job_scheduler.class%
+        arguments: [ "@logger", "@lilweb.job_resolver", "@doctrine.orm.entity_manager" ]
+        tags:
+            - { name: monolog.logger, channel: jobs }
+
+
+    lilweb.task_scheduler:
+        class: %task_scheduler.class%
+        arguments: [ "@service_container", "@logger" ]
+        tags:
+            - { name: monolog.logger, channel: jobs }
+
+
+    #
+    # Les taches héritent de ce service.
+    #
 
     lilweb.abstract_task:
         class: %abstract_task.class%

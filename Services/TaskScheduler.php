@@ -1,50 +1,51 @@
 <?php
 /**
- * User: Geoffrey Brier
- * Date: 18/03/13
- * Time: 14:32
+ * Author: Michiel Missotten
+ * Date: 26/04/13
+ * Time: 11:50
  */
-namespace Lilweb\JobBundle\Command;
+namespace Lilweb\JobBundle\Services;
 
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
-
-use Lilweb\JobBundle\Entity\TaskInfo;
+use Monolog\Logger;
+use Symfony\Component\DependencyInjection\Container;
 
 /**
- * Commande qui exécuter des taches une par une.
+ * C'est cette classe qui s'occupe de l'ordonnancement des différentes taches.
  */
-class TaskOrdonancerCommand extends ContainerAwareCommand
+class TaskScheduler
 {
     /**
-     * @var \Monolog\Logger
+     * @var Container Le service container.
+     */
+    private $container;
+
+    /**
+     * @var Logger
      */
     private $logger;
 
     /**
-     * {@inheritdoc}
+     * Constructeur pour l'injection du container.
      */
-    protected function configure()
+    public function __construct(Container $container, Logger $logger)
     {
-        $this
-            ->setName('lilweb:job:execute')
-            ->setDescription("Lance l'execution d'un job");
+        $this->container = $container;
+        $this->logger = $logger;
     }
 
     /**
-     * {@inheritdoc}
+     * Lance l'execution.
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    public function execute()
     {
-        $this->logger = $this->getContainer()->get('logger');
+        $this->logger = $this->container->get('logger');
         $this->logger->debug('Début de l\'ordonancement');
 
-        $jobResolver = $this->getContainer()->get('lilweb.job_resolver');
-        $em = $this->getContainer()->get('doctrine.orm.entity_manager');
-        $tasks = $jobResolver->getTasks();
+        $jobResolver = $this->container->get('lilweb.job_resolver');
+        $em = $this->container->get('doctrine.orm.entity_manager');
 
         // Go through all tasks to know whether or not one can be executed
+        $tasks = $jobResolver->getTasks();
         foreach ($tasks as $task) {
             if ($task->isExecutable($em)) {
                 $this->logger->debug('Traitement de la tache: '.$task->getName());
@@ -62,12 +63,12 @@ class TaskOrdonancerCommand extends ContainerAwareCommand
                 }
 
                 // Call the service responsible to execute the task
-                if (!$this->getContainer()->has($task->getServiceId())) {
+                if (!$this->container->has($task->getServiceId())) {
                     throw new \Exception('Unknown service "'.$task->getServiceId().'" for task "'.$task->getName().'"');
                 }
 
                 try {
-                    $this->getContainer()->get($task->getServiceId())->execute($taskInfo);
+                    $this->container->get($task->getServiceId())->execute($taskInfo);
                 } catch (\Exception $e) {
                     $taskInfo->setStatus(TaskInfo::TASK_FAIL);
                     $taskInfo->setInfoMsg($e->getMessage());
