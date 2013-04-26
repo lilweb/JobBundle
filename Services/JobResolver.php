@@ -7,11 +7,12 @@
 namespace Lilweb\JobBundle\Services;
 
 use Doctrine\Common\Collections\ArrayCollection;
-
+use Symfony\Component\DependencyInjection\Container;
 use Monolog\Logger;
 
 use Lilweb\JobBundle\Model\Task;
 use Lilweb\JobBundle\Model\Job;
+use Lilweb\JobBundle\Model\Trigger;
 
 /**
  * The JobResolver resolves jobs & tasks given a configuration file.
@@ -24,17 +25,30 @@ class JobResolver
     const EMPTY_TASKS_NODE = 'Le noeud "tasks" est vide';
     const EMPTY_JOBS_NODE = 'Le noeud "jobs" est vide';
 
-    /** @var string The job description file. */
+    /**
+     * @var string The job description file.
+     */
     private $file;
 
-    /** @var \Monolog\Logger */
+    /**
+     * @var \Monolog\Logger
+     */
     private $logger;
 
-    /** @var \Doctrine\Common\Collections\ArrayCollection The jobs found */
+    /**
+     * @var \Doctrine\Common\Collections\ArrayCollection The jobs found
+     */
     private $jobs;
 
-    /** @var \Doctrine\Common\Collections\ArrayCollection The tasks found */
+    /**
+     * @var \Doctrine\Common\Collections\ArrayCollection The tasks found
+     */
     private $tasks;
+
+    /**
+     * @var \Doctrine\Common\Collections\ArrayCollection The triggers found
+     */
+    private $triggers;
 
     /**
      * Constructor.
@@ -43,8 +57,11 @@ class JobResolver
     {
         $this->logger = $logger;
         $this->file = $file;
+
         $this->tasks = new ArrayCollection();
         $this->jobs = new ArrayCollection();
+        $this->triggers = new ArrayCollection();
+
         $this->load();
     }
 
@@ -65,14 +82,12 @@ class JobResolver
 
             // Vérification qu'un noeud 'tasks' existe
             $tasksNode = $dom->getElementsByTagName('tasks');
-
             if (!$tasksNode->length) {
                 throw new \Exception(self::MISSING_TASKS_NODE);
             }
 
-            // Vérification qu'un noeud 'tasks' jobs
+            // Vérification qu'un noeud 'jobs' existe
             $jobsNode = $dom->getElementsByTagName('jobs');
-
             if (!$jobsNode->length) {
                 throw new \Exception(self::MISSING_JOBS_NODE);
             }
@@ -80,6 +95,13 @@ class JobResolver
             // Chargements des taches et des jobs.
             $this->loadTasks($tasksNode->item(0)->childNodes);
             $this->loadJobs($jobsNode->item(0)->childNodes);
+
+            // Si un noeud triggers est définie, alors charger les triggers
+            $triggersNode = $dom->getElementsByTagName('triggers');
+            if ($triggersNode->length != 0) {
+                $this->loadTriggers($triggersNode->item(0)->childNodes);
+            }
+
         } catch (\Exception $e) {
             $this->logger->err($e->getMessage());
             throw $e;
@@ -87,7 +109,11 @@ class JobResolver
     }
 
     /**
+     * Chargement de la liste des taches à partir d'un noeud XML.
+     *
      * @param \DOMNodeList $elements
+     *
+     * @throws \Exception
      */
     private function loadTasks(\DOMNodeList $elements)
     {
@@ -110,6 +136,8 @@ class JobResolver
 
     /**
      * @param \DOMNodeList $elements
+     *
+     * @throws \Exception
      */
     private function loadJobs(\DOMNodeList $elements)
     {
@@ -127,6 +155,26 @@ class JobResolver
 
         if ($this->jobs->isEmpty()) {
             throw new \Exception(self::EMPTY_JOBS_NODE);
+        }
+    }
+
+    /**
+     * Analyse le noeud XML pour construire la liste des triggers.
+     *
+     * @param \DOMNodeList $elements
+     */
+    public function loadTriggers($elements)
+    {
+        if (!$elements->length) {
+            return;
+        }
+
+        foreach ($elements as $element) {
+            if ($element instanceof \DOMElement) {
+                $trigger = new Trigger($element);
+
+                $this->triggers[$trigger->getName()] = $trigger;
+            }
         }
     }
 
@@ -158,5 +206,13 @@ class JobResolver
     public function getTasks()
     {
         return $this->tasks;
+    }
+
+    /**
+     * @return \Doctrine\Common\Collections\ArrayCollection
+     */
+    public function getTriggers()
+    {
+        return $this->triggers;
     }
 }
