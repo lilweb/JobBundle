@@ -77,6 +77,11 @@ class JobInfo
     private $lastStatusUpdateDate;
 
     /**
+     * @var String Tableau sérialisé qui contient les différents parametres du job.
+     */
+    private $parameters;
+
+    /**
      * Constructor.
      */
     public function __construct()
@@ -186,5 +191,45 @@ class JobInfo
     public function setLastStatusUpdateDate(\DateTime $lastStatusUpdateDate)
     {
         $this->lastStatusUpdateDate = $lastStatusUpdateDate;
+    }
+
+    /**
+     * Retourne la value du parametre si elle existe. Lance une exception dans le cas contraire.
+     *
+     * @return String
+     */
+    public function getParameter($name)
+    {
+        $parameters = unserialize($this->parameters);
+        if (isset($parameters[$name])) {
+            return $parameters[$name];
+        } else {
+            throw new \Exception('The requested parameter could not be found');
+        }
+    }
+
+    /**
+     * Définit la valeur d'un paramètre.
+     */
+    public function setParameter($name, $value)
+    {
+        $parameters = unserialize($this->parameters);
+        $parameters[$name] = $value;
+        $this->parameters = serialize($parameters);
+    }
+
+    /**
+     * Ajoute ou remplace les paramètres du job par les parametres.
+     *
+     * @param $parameters
+     */
+    public function addParameters($parameters)
+    {
+        $localParameters = unserialize($this->parameters);
+        foreach ($parameters as $name => $value) {
+            $localParameters[$name] = $value;
+        }
+
+        $this->parameters = serialize($localParameters);
     }
 }

@@ -68,6 +68,7 @@ class TriggerManager
                 $jobInfo = new JobInfo();
                 $jobInfo->setJobRunner('cron');
                 $jobInfo->setName($job->getName());
+                $jobInfo->addParameters($triggerService->getParameters());
                 $jobInfo->addTaskInfo($taskInfo);
                 $jobInfo->setLastStatusUpdateDate(new \DateTime());
 

@@ -24,7 +24,7 @@ class TaskSchedulerCommand extends ContainerAwareCommand
     {
         $this
             ->setName('lilweb:job:execute')
-            ->setDescription("Lance l'execution d'un job");
+            ->setDescription("Lance la prochaine tache en attente");
     }
 
     /**

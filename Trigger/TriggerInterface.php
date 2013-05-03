@@ -17,4 +17,11 @@ interface TriggerInterface
      * @return boolean
      */
     public function checkCondition();
+
+    /**
+     * Retourne un tableau avec les différents parametres pour le job.
+     *
+     * @return array
+     */
+    public function getParameters();
 }
