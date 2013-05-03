@@ -23,13 +23,6 @@ services:
             - { name: monolog.logger, channel: jobs }
 
 
-    lilweb.job_scheduler:
-        class: %job_scheduler.class%
-        arguments: [ "@logger", "@lilweb.job_resolver", "@doctrine.orm.entity_manager" ]
-        tags:
-            - { name: monolog.logger, channel: jobs }
-
-
     lilweb.task_scheduler:
         class: %task_scheduler.class%
         arguments: [ "@service_container", "@logger" ]
