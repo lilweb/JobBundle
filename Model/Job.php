@@ -15,14 +15,25 @@ use Lilweb\JobBundle\Model\Task;
  */
 class Job
 {
-    /** @var \Doctrine\Common\Collections\ArrayCollection */
+    /**
+     * @var \Doctrine\Common\Collections\ArrayCollection
+     */
     private $tasks;
 
-    /** @var string The job name. */
+    /**
+     * @var string The job name.
+     */
     private $name;
 
-    /** @var boolean  */
+    /**
+     * @var string The CRON expression for the schedule of the job.
+     */
     private $schedule;
+
+    /**
+     * @var array An array of parameters for the job
+     */
+    private $params;
 
     /**
      * Constructor.
@@ -37,26 +48,44 @@ class Job
             throw new \Exception('Attribut "name" manquant dans un job.');
         }
 
-        $elements = $element->getElementsByTagName('task');
-        if (!$elements->length) {
+        $taskElements = $element->getElementsByTagName('task');
+        if (!$taskElements->length) {
             throw new \Exception('Un job doit contenir au moins une tache');
         }
 
         $this->name = $element->getAttribute('name');
-        $this->schedulable = false;
         $this->tasks = new ArrayCollection();
+        $this->params = array();
 
+        // Gestion des parametres d'un job
+        $paramElements = $element->getElementsByTagName('param');
+        foreach ($paramElements as $paramElement) {
+            if (!$paramElement->hasAttribute('name')) {
+                throw new \Exception('Attribut "name" manquant dans un parametre');
+            }
+
+            if (!$paramElement->hasAttribute('value')) {
+                throw new \Exception('Attribut "value" manquant dans un parametre');
+            }
+
+            $paramName = $paramElement->getAttribute('name');
+            $paramValue = $paramElement->getAttribute('value');
+
+            $this->params[$paramName] = $paramValue;
+        }
+
+        // Gestion du schedule
         if ($element->hasAttribute('schedule')) {
             $this->schedule = $element->getAttribute('schedule');
         }
 
-        foreach ($elements as $el) {
-            if ($el instanceof \DOMElement) {
-                if (!$el->hasAttribute('name')) {
+        foreach ($taskElements as $taskElement) {
+            if ($taskElement instanceof \DOMElement) {
+                if (!$taskElement->hasAttribute('name')) {
                     throw new \Exception('Attribut "name" manquant dans la tache d\'un job');
                 }
 
-                $taskName = $el->getAttribute('name');
+                $taskName = $taskElement->getAttribute('name');
                 if ($tasks->get($taskName) === null) {
                     throw new \Exception('Tache "'.$taskName.'" non définie.');
                 }
@@ -124,5 +153,13 @@ class Job
     public function getSchedule()
     {
         return $this->schedule;
+    }
+
+    /**
+     * @return array
+     */
+    public function getParams()
+    {
+        return $this->params;
     }
 }

@@ -78,6 +78,13 @@ class JobInfo
 
     /**
      * @var String Tableau sérialisé qui contient les différents parametres du job.
+     *
+     * @ORM\Column(
+     *      name     = "parameters",
+     *      type     = "string",
+     *      length   = 1000,
+     *      nullable = true
+     * )
      */
     private $parameters;
 
