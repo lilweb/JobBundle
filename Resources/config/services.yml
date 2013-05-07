@@ -3,6 +3,7 @@ parameters:
    command_task_scheduler.class: Lilweb\JobBundle\Command\TaskSchedulerCommand
 
    job_resolver.class: Lilweb\JobBundle\Services\JobResolver
+   job_manager.class: Lilweb\JobBundle\Services\JobManager
    task_scheduler.class: Lilweb\JobBundle\Services\TaskScheduler
    job_scheduler.class: Lilweb\JobBundle\Services\JobScheduler
    cron_scheduler.class: Lilweb\JobBundle\Services\CronScheduler
@@ -22,6 +23,13 @@ services:
         arguments: [ "@logger", %lilweb_job_bundle.job_file% ]
         tags:
             - { name: monolog.logger, channel: jobs }
+
+
+    lilweb.job_manager:
+        class: %job_manager.class%
+        calls:
+            - [ setEm, [ "@doctrine.orm.entity_manager" ] ]
+            - [ setJobResolver, [ "@lilweb.job_resolver" ]]
 
 
     lilweb.cron_scheduler:
