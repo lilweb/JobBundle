@@ -41,6 +41,8 @@ class JobInfo
      *     mappedBy     = "jobInfo",
      *     cascade      = { "persist", "remove" }
      * )
+     *
+     * @ORM\OrderBy({"executionDate" = "ASC"})
      */
     private $taskInfos;
 
@@ -210,9 +212,9 @@ class JobInfo
         $parameters = unserialize($this->parameters);
         if (isset($parameters[$name])) {
             return $parameters[$name];
-        } else {
-            throw new \Exception('The requested parameter could not be found');
         }
+
+        return null;
     }
 
     /**
