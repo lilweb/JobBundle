@@ -53,6 +53,7 @@ class JobManager
         $jobInfo->setName($job->getName());
         $jobInfo->addTaskInfo($taskInfo);
         $jobInfo->setJobRunner($launcher);
+        $jobInfo->setExecutionDate(new \DateTime());
         $jobInfo->setLastStatusUpdateDate(new \DateTime());
 
         foreach ($params as $paramName => $paramValue) {

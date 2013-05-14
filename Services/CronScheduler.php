@@ -71,6 +71,7 @@ class CronScheduler
                     $jobInfo->setJobRunner('cron');
                     $jobInfo->setName($job->getName());
                     $jobInfo->addTaskInfo($taskInfo);
+                    $jobInfo->setExecutionDate(new \DateTime());
                     $jobInfo->setLastStatusUpdateDate(new \DateTime());
 
                     foreach ($job->getParams() as $paramName => $parameterValue) {

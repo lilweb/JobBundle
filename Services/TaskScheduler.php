@@ -66,7 +66,7 @@ class TaskScheduler
                 // When running a job and it is its first task being executed
                 //     -> set the execution date of the job
                 if ($jobInfo === null || $jobInfo->getTaskInfos()->count() === 1) {
-                    $jobInfo->setExecutionDate(new \DateTime());
+                    $jobInfo->setLastStatusUpdateDate(new \DateTime());
                 }
 
                 // Call the service responsible to execute the task
