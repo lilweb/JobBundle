@@ -99,6 +99,19 @@ class JobInfo
     }
 
     /**
+     * On récupère le statut de la dernière tache executé.
+     */
+    public function getLastStatus()
+    {
+        $statut = 0;
+        foreach ($this->taskInfos as $taskInfo) {
+            $statut = $taskInfo->getStatus();
+        }
+
+        return $statut;
+    }
+
+    /**
      * @return integer
      */
     public function getId()
@@ -203,13 +216,52 @@ class JobInfo
     }
 
     /**
-     * Retourne la value du parametre si elle existe. Lance une exception dans le cas contraire.
+     * Encode et décode les parametres d'un job.
+     *
+     * @param $params
+     * @return string
+     */
+    public function encodeParameters($params)
+    {
+        $encoded = '';
+        foreach ($params as $name => $value) {
+            $encoded .= $name . '=' . $value . ';';
+        }
+
+        return substr($encoded, 0, -1);;
+    }
+
+    /**
+     * Encode et decode les parametres d'un job.
+     *
+     * @param $params
+     * @return array
+     */
+    public function decodeParameters($params)
+    {
+        if ($params == '') {
+            return array();
+        }
+
+        $result = array();
+        $dataArray = explode(';', $params);
+        foreach ($dataArray as $keyValue) {
+            list($key, $value) = explode('=', $keyValue);
+            $result[$key] = $value;
+        }
+
+        return $result;
+    }
+
+
+    /**
+     * Retourne la value du parametre si elle existe.
      *
      * @return String
      */
     public function getParameter($name)
     {
-        $parameters = unserialize($this->parameters);
+        $parameters = $this->decodeParameters($this->parameters);
         if (isset($parameters[$name])) {
             return $parameters[$name];
         }
@@ -222,9 +274,9 @@ class JobInfo
      */
     public function setParameter($name, $value)
     {
-        $parameters = unserialize($this->parameters);
+        $parameters = $this->decodeParameters($this->parameters);
         $parameters[$name] = $value;
-        $this->parameters = serialize($parameters);
+        $this->parameters = $this->encodeParameters($parameters);
     }
 
     /**
@@ -234,11 +286,8 @@ class JobInfo
      */
     public function addParameters($parameters)
     {
-        $localParameters = unserialize($this->parameters);
         foreach ($parameters as $name => $value) {
-            $localParameters[$name] = $value;
+            $this->setParameter($name, $value);
         }
-
-        $this->parameters = serialize($localParameters);
     }
 }
