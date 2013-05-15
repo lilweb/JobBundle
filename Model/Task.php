@@ -42,7 +42,7 @@ class Task
 
         $this->name = $element->getAttribute('name');
         $this->serviceId = $element->getAttribute('service-id');
-        $this->maxParallelExecution = 0;
+        $this->maxParallelExecution = 1;
 
         $this->stats = array(
             TaskInfo::TASK_FAIL    => 0,
@@ -82,8 +82,7 @@ class Task
         }
 
         // 2. If there is something to execute and we can execute it
-        if ($this->stats[TaskInfo::TASK_WAITING] > 0 &&
-            (!$this->stats[TaskInfo::TASK_RUNNING] || $this->isExecutableInParallel())) {
+        if ($this->stats[TaskInfo::TASK_WAITING] > 0 && $this->isExecutableInParallel()) {
             return true;
         }
 
@@ -100,7 +99,7 @@ class Task
         return (
             $this->maxParallelExecution === -1
                 ||
-            $this->maxParallelExecution  <= $this->stats[TaskInfo::TASK_RUNNING] + 1
+            $this->maxParallelExecution >= ($this->stats[TaskInfo::TASK_RUNNING] + 1)
         );
     }
 

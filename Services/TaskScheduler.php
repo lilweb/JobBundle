@@ -64,7 +64,6 @@ class TaskScheduler
                 $jobInfo = $taskInfo->getJobInfo();
 
                 // When running a job and it is its first task being executed
-                //     -> set the execution date of the job
                 if ($jobInfo === null || $jobInfo->getTaskInfos()->count() === 1) {
                     $jobInfo->setLastStatusUpdateDate(new \DateTime());
                 }

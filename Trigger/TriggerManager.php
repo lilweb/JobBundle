@@ -70,6 +70,7 @@ class TriggerManager
                 $jobInfo->setName($job->getName());
                 $jobInfo->addParameters($triggerService->getParameters());
                 $jobInfo->addTaskInfo($taskInfo);
+                $jobInfo->setExecutionDate(new \DateTime());
                 $jobInfo->setLastStatusUpdateDate(new \DateTime());
 
                 $em = $this->container->get('doctrine.orm.entity_manager');
