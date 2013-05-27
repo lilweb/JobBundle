@@ -145,6 +145,7 @@ class TaskInfo
         }
 
         $this->setLastStatusUpdateDate(new \DateTime());
+        $this->getJobInfo()->setLastStatusUpdateDate(new \DateTime());
 
         $this->status = $status;
     }
