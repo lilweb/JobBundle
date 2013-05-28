@@ -145,7 +145,11 @@ class TaskInfo
         }
 
         $this->setLastStatusUpdateDate(new \DateTime());
-        $this->getJobInfo()->setLastStatusUpdateDate(new \DateTime());
+        
+        // Si le job existe déjà a ce stade, on change la date de maj.
+        if ($this->getJobInfo() != null) {
+            $this->getJobInfo()->setLastStatusUpdateDate(new \DateTime());
+        }
 
         $this->status = $status;
     }
