@@ -47,6 +47,7 @@ class TriggerManager
     public function checkAll()
     {
         $resolver = $this->container->get('lilweb.job_resolver');
+        $jobManager = $this->get('lilweb.job_manager');
         $triggers = $resolver->getTriggers();
 
         foreach ($triggers as $trigger) {
@@ -56,26 +57,8 @@ class TriggerManager
             }
 
             if ($triggerService->checkCondition()) {
-                $job = $resolver->getJob($trigger->getJobName());
-
-                $this->logger->debug('Plannification du job: '.$job->getName() + " par le trigger : " + $trigger->getName());
-                $task = $job->getTasks()->first();
-
-                $taskInfo = new TaskInfo();
-                $taskInfo->setName($task->getName());
-                $taskInfo->setStatus(TaskInfo::TASK_WAITING);
-
-                $jobInfo = new JobInfo();
-                $jobInfo->setJobRunner('cron');
-                $jobInfo->setName($job->getName());
-                $jobInfo->addParameters($triggerService->getParameters());
-                $jobInfo->addTaskInfo($taskInfo);
-                $jobInfo->setExecutionDate(new \DateTime());
-                $jobInfo->setLastStatusUpdateDate(new \DateTime());
-
-                $em = $this->container->get('doctrine.orm.entity_manager');
-                $em->persist($jobInfo);
-                $em->flush();
+                $this->logger->debug('Plannification du job: '.$trigger->getJobName() + " par le trigger : " + $trigger->getName());
+                $jobManager->addJob($trigger->getJobName(), $triggerService->getParameters(), 'trigger');
             }
         }
     }
