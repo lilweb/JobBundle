@@ -13,7 +13,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * Commande qui va plannifier les jobs.
  */
-class JobTriggerCommand extends ContainerAwareCommand
+class JobCheckCommand extends ContainerAwareCommand
 {
     /**
      * {@inheritdoc}
@@ -21,8 +21,8 @@ class JobTriggerCommand extends ContainerAwareCommand
     protected function configure()
     {
         $this
-            ->setName('lilweb:job:trigger')
-            ->setDescription('Lance les triggers pour vérifier si des jobs doivent être lancées.');
+            ->setName('lilweb:job:check')
+            ->setDescription('Lance les vérifications pour savoir si des jobs doivent être lancées. (cron et triggers)');
     }
 
     /**
@@ -31,5 +31,6 @@ class JobTriggerCommand extends ContainerAwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $this->getContainer()->get('lilweb.trigger_manager')->checkAll();
+        $this->getContainer()->get('lilweb.cron_scheduler')->checkAll();
     }
 }
