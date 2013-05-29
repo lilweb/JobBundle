@@ -47,10 +47,6 @@ class TaskScheduler
         $jobResolver = $this->container->get('lilweb.job_resolver');
         $em = $this->container->get('doctrine.orm.entity_manager');
 
-        // Check the triggers & CRON expressions
-        $this->container->get('lilweb.trigger_manager')->checkAll();
-        $this->container->get('lilweb.cron_scheduler')->checkAll();
-
         // Go through all tasks to know whether or not one can be executed
         $tasks = $jobResolver->getTasks();
         foreach ($tasks as $task) {
