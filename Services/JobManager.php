@@ -8,8 +8,6 @@ namespace Lilweb\JobBundle\Services;
 
 use Doctrine\ORM\EntityManager;
 
-use Monolog\Logger;
-
 use Lilweb\JobBundle\Entity\JobInfo;
 use Lilweb\JobBundle\Entity\TaskInfo;
 
@@ -32,7 +30,11 @@ class JobManager
     /**
      * Permets de lancer le job avec les informations/parametres.
      *
-     * @param Job $job
+     * @param $jobName
+     * @param array $params
+     * @param string $launcher
+     * @throws \Exception
+     * @internal param \Lilweb\JobBundle\Services\Job $job
      */
     public function addJob($jobName, $params = array(), $launcher = '')
     {
