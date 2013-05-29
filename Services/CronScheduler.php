@@ -6,13 +6,11 @@
  */
 namespace Lilweb\JobBundle\Services;
 
-use Doctrine\ORM\EntityManager;
 use Monolog\Logger;
 
 use Cron;
 
 use Lilweb\JobBundle\Entity\TaskInfo;
-use Lilweb\JobBundle\Entity\JobInfo;
 
 /**
  * Planifie les jobs.
@@ -30,18 +28,18 @@ class CronScheduler
     private $jobResolver;
 
     /**
-     * @var EntityManager L'injection de l'entity manager.
+     * @var JobManager Le manager des jobs.
      */
-    private $em;
+    private $jobManager;
 
     /**
      * Injection des dependances.
      */
-    public function __construct(Logger $logger, JobResolver $resolver, EntityManager $manager)
+    public function __construct(Logger $logger, JobResolver $resolver, JobManager $jobManager)
     {
         $this->logger = $logger;
         $this->jobResolver = $resolver;
-        $this->em = $manager;
+        $this->jobManager = $jobManager;
     }
 
     /**
@@ -61,30 +59,13 @@ class CronScheduler
 
                 if ($cron->isDue()) {
                     $this->logger->debug('CRON match - plannification du job: '.$job->getName());
-                    $task = $job->getTasks()->first();
+                    $this->jobManager->addJob($job->getName(), $job->getParams(), 'cron');
 
-                    $taskInfo = new TaskInfo();
-                    $taskInfo->setName($task->getName());
-                    $taskInfo->setStatus(TaskInfo::TASK_WAITING);
-
-                    $jobInfo = new JobInfo();
-                    $jobInfo->setJobRunner('cron');
-                    $jobInfo->setName($job->getName());
-                    $jobInfo->addTaskInfo($taskInfo);
-                    $jobInfo->setExecutionDate(new \DateTime());
-                    $jobInfo->setLastStatusUpdateDate(new \DateTime());
-
-                    foreach ($job->getParams() as $paramName => $parameterValue) {
-                        $jobInfo->setParameter($paramName, $parameterValue);
-                    }
-
-                    $this->em->persist($jobInfo);
                     $cpt++;
                 }
             }
         }
 
-        $this->em->flush();
         $this->logger->debug('Nombre de job planifiés: '.$cpt);
         $this->logger->debug('Fin de la plannification des jobs');
     }

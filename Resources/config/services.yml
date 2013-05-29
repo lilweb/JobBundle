@@ -34,7 +34,7 @@ services:
 
     lilweb.cron_scheduler:
         class: %cron_scheduler.class%
-        arguments: [ "@logger", "@lilweb.job_resolver", "@doctrine.orm.entity_manager" ]
+        arguments: [ "@logger", "@lilweb.job_resolver", "@lilweb.job_manager" ]
         tags:
             - { name: monolog.logger, channel: jobs }
 
