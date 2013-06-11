@@ -70,7 +70,9 @@ class TaskScheduler
                 }
 
                 try {
+                    $taskInfo->setStatus(TaskInfo::TASK_RUNNING);
                     $this->container->get($task->getServiceId())->execute($taskInfo);
+                    $taskInfo->setStatus(TaskInfo::TASK_OVER);
                 } catch (\Exception $e) {
                     $taskInfo->setStatus(TaskInfo::TASK_FAIL);
                     $taskInfo->setInfoMsg($e->getMessage());
