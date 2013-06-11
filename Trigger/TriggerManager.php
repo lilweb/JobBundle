@@ -47,7 +47,7 @@ class TriggerManager
     public function checkAll()
     {
         $resolver = $this->container->get('lilweb.job_resolver');
-        $jobManager = $this->get('lilweb.job_manager');
+        $jobManager = $this->container->get('lilweb.job_manager');
         $triggers = $resolver->getTriggers();
 
         foreach ($triggers as $trigger) {
