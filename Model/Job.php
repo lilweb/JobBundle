@@ -112,6 +112,27 @@ class Job
     }
 
     /**
+     * Retourne une tache par son nom.
+     *
+     * @param $taskName
+     *
+     * @throws \Exception
+     * @return Task
+     */
+    public function getTask($taskName)
+    {
+        foreach ($this->tasks as $task) {
+            if ($task->getName() == $taskName) {
+                return $task;
+            }
+        }
+
+        throw new \Exception(
+            sprintf("The requested task %s could not be found for job '%s'", $taskName, $this->getName())
+        );
+    }
+
+    /**
      * @param string $taskName
      *
      * @return string|null
