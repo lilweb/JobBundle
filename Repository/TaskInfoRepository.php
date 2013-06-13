@@ -19,6 +19,7 @@ class TaskInfoRepository extends EntityRepository
     /**
      * Gets the statistics of a given task (the number of execution, waiting ... for this task).
      *
+     * @param $taskName
      * @return integer
      */
     public function getStatisticsForTask($taskName)
@@ -31,6 +32,42 @@ class TaskInfoRepository extends EntityRepository
             ->groupBy('ti.status')
             ->getQuery()
             ->getResult(Query::HYDRATE_ARRAY);
+    }
+
+    /**
+     * Retourne la liste des taches en attente par ordre de priorité.
+     *
+     * @return mixed
+     */
+    public function getWaitingTasks()
+    {
+        return $this
+            ->createQueryBuilder('ti')
+            ->where('ti.status = :status')
+            ->setParameter('status', TaskInfo::TASK_WAITING)
+            ->orderBy('ti.executionDate', 'ASC')
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * Retourne le nombre de taches de ce type en cours.
+     *
+     * @param $taskName
+     *
+     * @return integer
+     */
+    public function getNumberOfRunningTasks($taskName)
+    {
+        $this->createQueryBuilder('ti')
+            ->select('COUNT(ti.id) as nb')
+            ->where('ti.status = :taskStatus')
+            ->andWhere('ti.name = :taskName')
+            ->setParameter('taskName', $taskName)
+            ->setParameter('taskStatus', TaskInfo::TASK_WAITING)
+            ->getQuery()
+            ->getSingleScalarResult();
     }
 
     /**
@@ -48,7 +85,7 @@ class TaskInfoRepository extends EntityRepository
             ->andWhere('ti.status = :status')
             ->setParameter('taskName', $taskName)
             ->setParameter('status', TaskInfo::TASK_WAITING)
-            ->orderBy('ti.id', 'ASC')
+            ->orderBy('ti.executionDate', 'ASC')
             ->setMaxResults(1)
             ->getQuery()
             ->getOneOrNullResult();
