@@ -63,6 +63,7 @@ class TaskScheduler
             // TODO Gestion de la parallélisation
             if ($currentlyRunning == 0) {
                 $this->runTask($waitingTask);
+                $this->logger->debug('There are no waiting tasks');
 
                 break;
             }
