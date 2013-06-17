@@ -97,6 +97,14 @@ class TaskInfo
      * )
      */
     private $infoMsg;
+    
+    /**
+     * Initialisation de la date de création.
+     */
+    public function __construct()
+    {
+        $this->executionDate = new \DateTime();
+    }
 
     /**
      * @return integer
