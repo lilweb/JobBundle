@@ -105,14 +105,16 @@ class TaskScheduler
         // Execution de la tache
         try {
             $taskInfo->setStatus(TaskInfo::TASK_RUNNING);
+            $this->container->get('doctrine.orm.entity_manager')->flush();
+
             $this->container->get($taskConfiguration->getServiceId())->execute($taskInfo);
+
             $taskInfo->setStatus(TaskInfo::TASK_OVER);
-        } catch (\OCI8Exception $oci) {
-            $taskInfo->setStatus(TaskInfo::TASK_FAIL);
-            $taskInfo->setInfoMsg($oci->getMessage());
-            $this->logger->err('OCIException: ' . $oci->getMessage());
+            $this->container->get('doctrine.orm.entity_manager')->flush();
         } catch (\Exception $e) {
             $taskInfo->setStatus(TaskInfo::TASK_FAIL);
+            $this->container->get('doctrine.orm.entity_manager')->flush();
+
             $taskInfo->setInfoMsg($e->getMessage());
             $this->logger->err('Exception: ' . $e->getMessage());
         }
