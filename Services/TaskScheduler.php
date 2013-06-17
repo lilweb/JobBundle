@@ -58,7 +58,7 @@ class TaskScheduler
             $currentlyRunning = $this->container
                 ->get('doctrine.orm.entity_manager')
                 ->getRepository('LilwebJobBundle:TaskInfo')
-                ->getNumberOfRunningTasks($waitingTask->getName());
+                ->getNumberOfRunningTasks();
 
             // TODO Gestion de la parallélisation
             if ($currentlyRunning == 0) {
@@ -107,6 +107,10 @@ class TaskScheduler
             $taskInfo->setStatus(TaskInfo::TASK_RUNNING);
             $this->container->get($taskConfiguration->getServiceId())->execute($taskInfo);
             $taskInfo->setStatus(TaskInfo::TASK_OVER);
+        } catch (\OCI8Exception $oci) {
+            $taskInfo->setStatus(TaskInfo::TASK_FAIL);
+            $taskInfo->setInfoMsg($oci->getMessage());
+            $this->logger->err('OCIException: ' . $oci->getMessage());
         } catch (\Exception $e) {
             $taskInfo->setStatus(TaskInfo::TASK_FAIL);
             $taskInfo->setInfoMsg($e->getMessage());

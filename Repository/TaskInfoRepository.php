@@ -58,16 +58,20 @@ class TaskInfoRepository extends EntityRepository
      *
      * @return integer
      */
-    public function getNumberOfRunningTasks($taskName)
+    public function getNumberOfRunningTasks($taskName = null)
     {
-        $this->createQueryBuilder('ti')
+        $qb = $this->createQueryBuilder('ti')
             ->select('COUNT(ti.id) as nb')
             ->where('ti.status = :taskStatus')
-            ->andWhere('ti.name = :taskName')
-            ->setParameter('taskName', $taskName)
-            ->setParameter('taskStatus', TaskInfo::TASK_WAITING)
-            ->getQuery()
-            ->getSingleScalarResult();
+            ->setParameter('taskStatus', TaskInfo::TASK_WAITING);
+
+        if ($taskName != null) {
+            $qb
+                ->andWhere('ti.name = :taskName')
+                ->setParameter('taskName', $taskName);
+        }
+
+        return $qb->getQuery()->getSingleScalarResult();
     }
 
     /**
