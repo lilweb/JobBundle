@@ -63,7 +63,7 @@ class TaskInfoRepository extends EntityRepository
         $qb = $this->createQueryBuilder('ti')
             ->select('COUNT(ti.id) as nb')
             ->where('ti.status = :taskStatus')
-            ->setParameter('taskStatus', TaskInfo::TASK_WAITING);
+            ->setParameter('taskStatus', TaskInfo::TASK_RUNNING);
 
         if ($taskName != null) {
             $qb
