@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="fr-FR">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+
+    <link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.no-icons.min.css" rel="stylesheet">
+    <link href="http://netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
+    <link href="{{ asset("bundles/lilwebjob/css/style.css") }}" rel="stylesheet">
+
+    <script type="text/javascript" src="{{ asset("bundles/lilwebjob/js/jquery-2.0.1.min.js") }}"></script>
+    <script type="text/javascript" src="{{ asset("bundles/lilwebjob/js/underscore-1.4.4.min.js") }}"></script>
+    <script type="text/javascript" src="{{ asset("bundles/lilwebjob/js/backbone-1.0.0.js") }}"></script>
+    <script type="text/javascript" src="{{ asset("bundles/lilwebjob/js/moment.min.js") }}"></script>
+    <script type="text/javascript" src="{{ asset("bundles/lilwebjob/js/moment-fr.js") }}"></script>
+    <script type="text/javascript" src="{{ asset("bundles/lilwebjob/js/app.js") }}"></script>
+</head>
+<body>
+
+    <div class="container">
+
+        <div class="day">
+            <div class="date">
+                <span class="day">19</span>
+                <br />
+                <span class="month">Jun</span>
+            </div>
+
+            <div id="jobs">
+                <ul class="jobs">
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Template de la task -->
+    <script id="jobTemplate" type="text/template">
+        <div class="infos" data-id="<%= id %>">
+            <small>
+                <%= moment.unix(dateCreation).format("H:mm") %> -
+            </small>
+            <%= name %>
+
+            <div class="params">
+                <ul>
+                    <li>FRS</li>
+                    <li>1002</li>
+                    <li>31</li>
+                </ul>
+            </div>
+        </div>
+    </script>
+
+    <!-- Template de la task -->
+    <script id="taskTemplate" type="text/template">
+        <div class="tasks">
+            <div class="actions">
+                <a href="#" title="Relancer">
+                    <i class="icon-repeat"></i>
+                </a>
+
+                <a href="#" title="Abandonner">
+                    <i class="icon-remove-sign"></i>
+                </a>
+            </div>
+    </script>
+
+
+
+
+
+
+
+
+            {#
+
+                {#<ul class="tasks">#}
+                    {#<li>#}
+                        {#<small>14h32 - </small> import:magasins#}
+
+                        {#<div class="params">#}
+                            {#<a href="#">#}
+                                {#voir logs#}
+                                {#<i class="icon-external-link-sign"></i>#}
+                            {#</a>#}
+                        {#</div>#}
+                    {#</li>#}
+                    {#<li>#}
+                        {#<small>14h28 - </small> import:equipes#}
+                    {#</li>#}
+                {#</ul>#}
+            {#</div>#}
+
+    <script id="tasksTemplate" type="text/template">
+
+    </script>
+
+</body>
+</html>
