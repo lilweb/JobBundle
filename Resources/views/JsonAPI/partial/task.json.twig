@@ -1,0 +1,6 @@
+{
+    "id" : {{ task.id }},
+    "name" : "{{ task.name }}",
+    "dateCreation" : {{ task.executionDate | date('U') }},
+    "dateUpdate" : {{ task.lastStatusUpdateDate | date('U') }}
+}

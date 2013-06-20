@@ -1,0 +1,14 @@
+# L'application backbone principale.
+Lilweb_job_application:
+    pattern: /jobs/application
+    defaults: { _controller: LilwebJobBundle:Application:index }
+
+# La liste des jobs
+Listing_jobs_v1:
+    pattern: /api/v1/jobs.json
+    defaults:  { _controller: LilwebJobBundle:JsonAPI:getJobsForDay }
+
+# La liste des taches par job
+Listing_tasks_job_v1:
+    pattern: /api/v1/tasks/{id}.json
+    defaults: { _controller: LilwebJobBundle:JsonAPI:getTasksForJob }

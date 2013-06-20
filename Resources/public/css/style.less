@@ -1,0 +1,158 @@
+body {
+    background-color: white;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+
+    color: #696969;
+    margin-top: 30px;
+}
+
+#container {
+    margin: 0 auto;
+    width: 940px;
+    min-height: 500px;
+    height: 100%;
+
+}
+
+div.day {
+    clear: both;
+    padding-top: 20px;
+    padding-bottom: 20px;
+
+    div.date {
+        float: left;
+        width: 50px;
+
+        padding-top: 15px;
+        text-align: center;
+
+        span.day {
+            font-size: 2em;
+        }
+
+        span.month {
+            font-size: 1.2em;
+        }
+
+        div.day .date {
+            float: left;
+            width: 50px;
+        }
+    }
+
+    div#jobs {
+        float: left;
+        width: 800px;
+
+        ul.jobs {
+            margin-left: 0px;
+            margin-top: 0px;
+
+            padding-left: 20px;
+            border-left: 2px solid gray;
+
+            padding-top: 10px;
+            padding-bottom: 0px;
+            list-style: none;
+
+            & > li:first-child {
+                border: 1px solid lightgray;
+            }
+
+            & > li {
+                clear: both;
+                text-align: left;
+
+                border: 1px solid lightgray;
+                border-top: none;
+
+                div.infos {
+                    width: 750px;
+                    padding: 5px;
+                    border-left: 10px solid lightgreen;
+
+                    div.params {
+                        float: right;
+
+                        ul li {
+                            border: none;
+                            width: 60px;
+                            text-align: center;
+                            display: inline-block;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+
+
+
+/** ACTIF **/
+ul.jobs > li.active {
+    border: 1px solid lightgray;
+    margin-bottom: 0px;
+}
+
+ul.jobs > li:hover {
+    cursor: pointer;
+}
+
+div.tasks {
+    clear: both;
+    float: left;
+
+    color: white;
+    background-color: gray;
+}
+
+ul.tasks {
+    color: gray;
+    background-color: white;
+    /*box-shadow: -2px 0px 5px -2px black;*/
+
+    text-align: left;
+    list-style: none;
+
+    margin-left: 40px;
+    width: 723px;
+}
+
+ul.tasks li {
+    padding: 5px;
+
+    border-left: 10px solid lightgreen;
+    border-bottom: 1px solid lightgray;
+    border-right: 1px solid lightgray;
+}
+
+div.tasks {
+    float: left;
+}
+
+div.actions {
+    float: left;
+    width: 45px;
+    text-align: center;
+
+    padding-top: 5px;
+    font-size: 1.2em;
+}
+
+div.actions a:visited, div.actions a {
+    display: block;
+    padding-top: 5px;
+
+    color: white;
+    text-decoration: none;
+}
+
+div.actions a:hover {
+    text-decoration: none;
+}
+
+
+

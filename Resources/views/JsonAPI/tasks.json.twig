@@ -1,0 +1,6 @@
+[
+    {% for task in tasks %}
+        {% include 'LilwebJobBundle:JsonAPI:partial/task.json.twig' with { "task" : task } only %}
+        {% if not loop.last %},{% endif %}
+    {% endfor %}
+]

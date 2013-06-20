@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass = "Lilweb\JobBundle\Repository\JobInfoRepository")
  * @ORM\Table(name = "job_infos")
  */
 class JobInfo
