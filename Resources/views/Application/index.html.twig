@@ -18,7 +18,6 @@
 <body>
 
     <div class="container">
-
         <div class="day">
             <div class="date">
                 <span class="day">19</span>
@@ -33,13 +32,25 @@
         </div>
     </div>
 
-    <!-- Template de la task -->
+    <!-- Template du job -->
     <script id="jobTemplate" type="text/template">
-        <div class="infos" data-id="<%= id %>">
-            <small>
-                <%= moment.unix(dateCreation).format("H:mm") %> -
-            </small>
-            <%= name %>
+        <small><%= moment.unix(dateCreation).format("H:mm") %> -</small>
+
+        <div class="actions">
+            <a href="#"><i class="icon-repeat"></i></a>
+            <a href="#"><i class="icon-remove"></i></a>
+        </div>
+
+        <% if (status == 1) { %>
+            <div class="infos running" data-id="<%= id %>">
+        <% } else if (status == 2) { %>
+            <div class="infos success" data-id="<%= id %>">
+        <% } else if (status == 3) { %>
+            <div class="infos error" data-id="<%= id %>">
+        <% } else { %>
+            <div class="infos" data-id="<%= id %>">
+        <% } %>
+            <span><%= name %></span>
 
             <div class="params">
                 <ul>
@@ -49,49 +60,41 @@
                 </ul>
             </div>
         </div>
+
     </script>
 
-    <!-- Template de la task -->
-    <script id="taskTemplate" type="text/template">
-        <div class="tasks">
-            <div class="actions">
-                <a href="#" title="Relancer">
-                    <i class="icon-repeat"></i>
-                </a>
+    <!-- Template des task -->
+    <script id="tasksTemplate" type="text/template">
+        <ul id="tasks-<%= id %>" class="tasks"></ul>
+    </script>
 
-                <a href="#" title="Abandonner">
-                    <i class="icon-remove-sign"></i>
+    <!-- Template d'une seule tache -->
+    <script id="taskTemplate" type="text/template">
+        <small><%= moment.unix(dateCreation).format("H:mm") %> - </small>
+
+        <div class="actions">
+            <a href="#"><i class="icon-repeat"></i></a>
+            <a href="#"><i class="icon-level-down"></i></a>
+        </div>
+
+        <% if (status == 1) { %>
+            <div class="infos running">
+        <% } else if (status == 2) { %>
+            <div class="infos success">
+        <% } else if (status == 3) { %>
+            <div class="infos error">
+        <% } else { %>
+            <div class="infos">
+        <% } %>
+            <div class="params">
+                <a href="#">
+
+                    <i class="icon-warning-sign"></i>
                 </a>
             </div>
-    </script>
 
-
-
-
-
-
-
-
-            {#
-
-                {#<ul class="tasks">#}
-                    {#<li>#}
-                        {#<small>14h32 - </small> import:magasins#}
-
-                        {#<div class="params">#}
-                            {#<a href="#">#}
-                                {#voir logs#}
-                                {#<i class="icon-external-link-sign"></i>#}
-                            {#</a>#}
-                        {#</div>#}
-                    {#</li>#}
-                    {#<li>#}
-                        {#<small>14h28 - </small> import:equipes#}
-                    {#</li>#}
-                {#</ul>#}
-            {#</div>#}
-
-    <script id="tasksTemplate" type="text/template">
+            <span><%= name %></span>
+        </div>
 
     </script>
 

@@ -2,5 +2,6 @@
     "id" : {{ job.id }},
     "name" : "{{ job.name }}",
     "dateCreation" : {{ job.executionDate | date('U') }},
-    "dateUpdate" : {{ job.lastStatusUpdateDate | date('U') }}
+    "dateUpdate" : {{ job.lastStatusUpdateDate | date('U') }},
+    "status" : {{ job.lastStatus }}
 }
