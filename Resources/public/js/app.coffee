@@ -1,7 +1,9 @@
 # Démarrage de l'application
 $ ->
-    new Application()
-    console.log "Starting applicaiton"
+    application = new Application()
+    application.setParameters "magasin", ""
+
+    console.log "Starting application"
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -9,9 +11,13 @@ $ ->
 
 class Application extends Backbone.View
     el: $("#container")
+    parameters: null
 
     initialize: ->
         this.jobsView = new JobsView()
+
+    setParameters: (parameters) ->
+        this.parameters = parameters
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -24,6 +30,7 @@ class Job extends Backbone.Model
         name: null
         dateCreation: null
         dateUpdate: null
+        status: null
 
 # Représente une tache
 class Task extends Backbone.Model
@@ -32,6 +39,11 @@ class Task extends Backbone.Model
         name: null
         dateCreation: null
         dateUpdate: null
+        status: null
+
+class Parameter extends Backbone.Model
+    defaults:
+        nom: null
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -53,22 +65,52 @@ class TaskCollection extends Backbone.Collection
     url: ->
         if @id
             "http://ping.me/app_dev.php/api/v1/tasks/" + @id + ".json"
-        else
-            console.log "There is no current id assigned"
-            ""
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+# La vue d'une seule tache
+class TaskView extends Backbone.View
+    tagName: "li"
+
+    initialize: ->
+        this.model.bind "change", this.render
+
+    render: ->
+        tmpl = _.template($("#taskTemplate").html())
+        console.log this.model
+        this.$el.html(tmpl(this.model.toJSON()))
+        this
+
+# La vue des taches d'un job
+class TasksView extends Backbone.View
+    id: null
+
+    setId: (id) ->
+        this.id = id
+        this.collection = new TaskCollection(id)
+        this.collection.bind "add", this.renderTask, this
+        this.collection.fetch().render
+
+    render: ->
+        tmpl = _.template($("#tasksTemplate").html())
+        tmpl
+            "id": @id
+
+    renderTask: (task) ->
+        this.collection.add task
+        taskView = new TaskView
+            model: task
+        $("#tasks-" + @id).append(taskView.render().el)
 
 # La vue d'un seul job
 class JobView extends Backbone.View
     tagName: "li"
-
-    tasks: null
+    tasksView: null
 
     events:
-        'click *' : 'afficherJob'
+        'click .infos' : 'afficherTasks'
 
     initialize: ->
         this.model.bind "change", this.render
@@ -78,10 +120,17 @@ class JobView extends Backbone.View
         this.$el.html(tmpl(this.model.toJSON()))
         this
 
-    afficherJob: (event) ->
-        id = $(event.currentTarget).closest("div.infos").data("id")
-        this.tasks = new TaskCollection(id)
-        this.tasks.fetch()
+    afficherTasks: (event) ->
+        if not this.tasksView?
+            id = $(event.currentTarget).closest("div.infos").data("id")
+            this.tasksView = new TasksView
+            this.tasksView.setId id
+            this.$el.after(this.tasksView.render())
+            this.$el.toggleClass "open"
+        else
+            this.$el.next("ul.tasks").remove()
+            this.tasksView = null
+            this.$el.toggleClass "open"
 
 # La vue de tout les jobs
 class JobsView extends Backbone.View

@@ -11,7 +11,6 @@ body {
     width: 940px;
     min-height: 500px;
     height: 100%;
-
 }
 
 div.day {
@@ -55,21 +54,52 @@ div.day {
             padding-bottom: 0px;
             list-style: none;
 
-            & > li:first-child {
-                border: 1px solid lightgray;
+            li.open div.infos {
+                border-bottom: 1px solid lightgray;
+            }
+
+            & > li:last-child div.infos {
+                border-bottom: 1px solid lightgray;
+            }
+
+            & > li:last-child {
+
+                div.actions {
+                    border-bottom: 1px solid lightgray;
+                }
             }
 
             & > li {
                 clear: both;
                 text-align: left;
 
-                border: 1px solid lightgray;
-                border-top: none;
+                small {
+                    display: block;
+                    float: left;
+                    line-height: 30px;
+                }
 
                 div.infos {
-                    width: 750px;
+                    width: 710px;
+
+                    border: 1px solid lightgray;
+                    border-left: 10px solid lightgray;
+                    border-bottom: none;
+
+                    margin-left: 45px;
                     padding: 5px;
-                    border-left: 10px solid lightgreen;
+
+                    &.running {
+                        border-left: 10px solid lightblue;
+                    }
+
+                    &.success {
+                        border-left: 10px solid lightgreen;
+                    }
+
+                    &.error {
+                        border-left: 10px solid lightcoral;
+                    }
 
                     div.params {
                         float: right;
@@ -82,14 +112,103 @@ div.day {
                         }
                     }
                 }
+
+                div.actions {
+                    float: right;
+                    padding: 6px;
+                    padding-bottom: 5px;
+
+                    color: white;
+                    border-bottom: 1px solid white;
+                    background-color: gray;
+
+                    a, a:visited {
+                        display: inline-block;
+                        width: 20px;
+                        color: white;
+                        text-align: center;
+                        text-decoration: none;
+
+                        &:hover {
+                            text-decoration: none;
+                        }
+                    }
+                }
+            }
+        }
+
+
+        ul.jobs ul.tasks:last-of-type div {
+            border-bottom: 1px solid lightgray;
+        }
+
+        ul.tasks {
+            background-color: white;
+            /*box-shadow: -2px 0px 5px -2px black;*/
+
+            text-align: left;
+            list-style: none;
+
+            margin-left: 80px;
+            width: 698px;
+
+            li {
+                small {
+                    float: left;
+                    line-height: 30px;
+                }
+
+                div.infos {
+                    float: left;
+                    width: 578px;
+                    padding: 5px;
+                    margin-left: 5px;
+
+                    border-left: 10px solid lightgray;
+
+                    &.running {
+                        border-left: 10px solid lightblue;
+                    }
+
+                    &.success {
+                        border-left: 10px solid lightgreen;
+                    }
+
+                    &.error {
+                        border-left: 10px solid lightcoral;
+                    }
+                }
+
+                div.params {
+                    float: right;
+                    border: 0px !important;
+                }
+
+                div.actions {
+                    float: right;
+                    padding: 5px;
+
+                    color: gray;
+                    border-left: 1px solid lightgray;
+                    border-right: 1px solid lightgray;
+
+                    a, a:visited {
+                        display: inline-block;
+                        width: 20px;
+                        text-align: center;
+                        text-decoration: none;
+                        color: gray;
+
+                        &:hover {
+                            color: black;
+                            text-decoration: none;
+                        }
+                    }
+                }
             }
         }
     }
 }
-
-
-
-
 
 /** ACTIF **/
 ul.jobs > li.active {
@@ -101,58 +220,7 @@ ul.jobs > li:hover {
     cursor: pointer;
 }
 
-div.tasks {
-    clear: both;
-    float: left;
 
-    color: white;
-    background-color: gray;
-}
-
-ul.tasks {
-    color: gray;
-    background-color: white;
-    /*box-shadow: -2px 0px 5px -2px black;*/
-
-    text-align: left;
-    list-style: none;
-
-    margin-left: 40px;
-    width: 723px;
-}
-
-ul.tasks li {
-    padding: 5px;
-
-    border-left: 10px solid lightgreen;
-    border-bottom: 1px solid lightgray;
-    border-right: 1px solid lightgray;
-}
-
-div.tasks {
-    float: left;
-}
-
-div.actions {
-    float: left;
-    width: 45px;
-    text-align: center;
-
-    padding-top: 5px;
-    font-size: 1.2em;
-}
-
-div.actions a:visited, div.actions a {
-    display: block;
-    padding-top: 5px;
-
-    color: white;
-    text-decoration: none;
-}
-
-div.actions a:hover {
-    text-decoration: none;
-}
 
 
 
