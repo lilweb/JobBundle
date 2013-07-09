@@ -4,11 +4,18 @@ body {
   color: #696969;
   margin-top: 30px;
 }
-#container {
-  margin: 0 auto;
-  width: 940px;
-  min-height: 500px;
-  height: 100%;
+div.loadNextDay {
+  clear: both;
+  width: 50px;
+  font-size: x-large;
+  margin-top: 50px;
+  text-align: center;
+}
+div.loadNextDay a {
+  color: gray;
+}
+div.loadNextDay a:hover {
+  text-decoration: none;
 }
 div.day {
   clear: both;
@@ -31,136 +38,148 @@ div.day div.date div.day .date {
   float: left;
   width: 50px;
 }
-div.day div#jobs {
+div.day div.jobs {
   float: left;
-  width: 800px;
+  width: 850px;
+  padding-bottom: 10px;
+  border-left: 2px solid gray;
 }
-div.day div#jobs ul.jobs {
+div.day div.jobs ul.jobs {
   margin-left: 0px;
   margin-top: 0px;
   padding-left: 20px;
-  border-left: 2px solid gray;
   padding-top: 10px;
   padding-bottom: 0px;
   list-style: none;
 }
-div.day div#jobs ul.jobs li.open div.infos {
+div.day div.jobs ul.jobs li.open div.infos {
   border-bottom: 1px solid lightgray;
 }
-div.day div#jobs ul.jobs > li:last-child div.infos {
+div.day div.jobs ul.jobs > li:last-child div.infos {
   border-bottom: 1px solid lightgray;
 }
-div.day div#jobs ul.jobs > li:last-child div.actions {
+div.day div.jobs ul.jobs > li:last-child div.actions {
   border-bottom: 1px solid lightgray;
 }
-div.day div#jobs ul.jobs > li {
+div.day div.jobs ul.jobs > li {
   clear: both;
   text-align: left;
 }
-div.day div#jobs ul.jobs > li small {
+div.day div.jobs ul.jobs > li small {
   display: block;
   float: left;
   line-height: 30px;
 }
-div.day div#jobs ul.jobs > li div.infos {
-  width: 710px;
+div.day div.jobs ul.jobs > li div.infos {
+  width: 620px;
   border: 1px solid lightgray;
   border-left: 10px solid lightgray;
   border-bottom: none;
-  margin-left: 45px;
+  margin-left: 43px;
   padding: 5px;
 }
-div.day div#jobs ul.jobs > li div.infos.running {
+div.day div.jobs ul.jobs > li div.infos.running {
   border-left: 10px solid lightblue;
 }
-div.day div#jobs ul.jobs > li div.infos.success {
+div.day div.jobs ul.jobs > li div.infos.success {
   border-left: 10px solid lightgreen;
 }
-div.day div#jobs ul.jobs > li div.infos.error {
+div.day div.jobs ul.jobs > li div.infos.error {
   border-left: 10px solid lightcoral;
 }
-div.day div#jobs ul.jobs > li div.infos div.params {
+div.day div.jobs ul.jobs > li div.infos div.params {
   float: right;
 }
-div.day div#jobs ul.jobs > li div.infos div.params ul li {
+div.day div.jobs ul.jobs > li div.infos div.params ul li {
   border: none;
   width: 60px;
   text-align: center;
   display: inline-block;
 }
-div.day div#jobs ul.jobs > li div.actions {
+div.day div.jobs ul.jobs > li div.actions {
   float: right;
   padding: 6px;
   padding-bottom: 5px;
+  width: 44px;
+  height: 20px;
   color: white;
   border-bottom: 1px solid white;
   background-color: gray;
 }
-div.day div#jobs ul.jobs > li div.actions a,
-div.day div#jobs ul.jobs > li div.actions a:visited {
+div.day div.jobs ul.jobs > li div.actions a,
+div.day div.jobs ul.jobs > li div.actions a:visited {
   display: inline-block;
   width: 20px;
   color: white;
   text-align: center;
   text-decoration: none;
 }
-div.day div#jobs ul.jobs > li div.actions a:hover,
-div.day div#jobs ul.jobs > li div.actions a:visited:hover {
+div.day div.jobs ul.jobs > li div.actions a:hover,
+div.day div.jobs ul.jobs > li div.actions a:visited:hover {
   text-decoration: none;
 }
-div.day div#jobs ul.jobs ul.tasks:last-of-type div {
+div.day div.jobs ul.jobs > li div.runner {
+  float: right;
+  padding: 6px;
+  width: 79px;
+  padding-bottom: 5px;
+  font-style: italic;
+}
+div.day div.jobs ul.jobs ul.tasks div {
   border-bottom: 1px solid lightgray;
 }
-div.day div#jobs ul.tasks {
+div.day div.jobs ul.tasks {
   background-color: white;
   /*box-shadow: -2px 0px 5px -2px black;*/
 
   text-align: left;
   list-style: none;
   margin-left: 80px;
-  width: 698px;
+  width: 659px;
 }
-div.day div#jobs ul.tasks li small {
+div.day div.jobs ul.tasks li small {
   float: left;
   line-height: 30px;
 }
-div.day div#jobs ul.tasks li div.infos {
+div.day div.jobs ul.tasks li div.infos {
   float: left;
-  width: 578px;
+  width: 539px;
   padding: 5px;
   margin-left: 5px;
   border-left: 10px solid lightgray;
 }
-div.day div#jobs ul.tasks li div.infos.running {
+div.day div.jobs ul.tasks li div.infos.running {
   border-left: 10px solid lightblue;
 }
-div.day div#jobs ul.tasks li div.infos.success {
+div.day div.jobs ul.tasks li div.infos.success {
   border-left: 10px solid lightgreen;
 }
-div.day div#jobs ul.tasks li div.infos.error {
+div.day div.jobs ul.tasks li div.infos.error {
   border-left: 10px solid lightcoral;
 }
-div.day div#jobs ul.tasks li div.params {
+div.day div.jobs ul.tasks li div.params {
   float: right;
   border: 0px !important;
 }
-div.day div#jobs ul.tasks li div.actions {
+div.day div.jobs ul.tasks li div.actions {
   float: right;
   padding: 5px;
+  width: 44px;
+  height: 20px;
   color: gray;
   border-left: 1px solid lightgray;
   border-right: 1px solid lightgray;
 }
-div.day div#jobs ul.tasks li div.actions a,
-div.day div#jobs ul.tasks li div.actions a:visited {
-  display: inline-block;
+div.day div.jobs ul.tasks li div.actions a,
+div.day div.jobs ul.tasks li div.actions a:visited {
   width: 20px;
+  display: inline-block;
   text-align: center;
   text-decoration: none;
   color: gray;
 }
-div.day div#jobs ul.tasks li div.actions a:hover,
-div.day div#jobs ul.tasks li div.actions a:visited:hover {
+div.day div.jobs ul.tasks li div.actions a:hover,
+div.day div.jobs ul.tasks li div.actions a:visited:hover {
   color: black;
   text-decoration: none;
 }
@@ -169,6 +188,6 @@ ul.jobs > li.active {
   border: 1px solid lightgray;
   margin-bottom: 0px;
 }
-ul.jobs > li:hover {
+ul.jobs > li:hover div.infos {
   cursor: pointer;
 }

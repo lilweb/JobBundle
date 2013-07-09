@@ -31,6 +31,7 @@ class Task
      *
      * @param \DOMElement $element The XML element.
      * @throws \Exception
+     * @return \Lilweb\JobBundle\Model\Task
      */
     public function __construct(\DOMElement $element)
     {
@@ -69,5 +70,13 @@ class Task
     public function getServiceId()
     {
         return $this->serviceId;
+    }
+
+    /**
+     * @return int
+     */
+    public function getMaxParallelExecution()
+    {
+        return $this->maxParallelExecution;
     }
 }

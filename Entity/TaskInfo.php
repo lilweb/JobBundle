@@ -66,6 +66,16 @@ class TaskInfo
     private $jobInfo;
 
     /**
+     * @var integer L'ordre dans lequel doit être executé la tache dans la liste des jobs.
+     *
+     * @ORM\Column(
+     *      name = "ordre",
+     *      type = "integer"
+     * )
+     */
+    private $ordre;
+
+    /**
      * @var \DateTime The date the at which the task began.
      *
      * @ORM\Column(
@@ -252,6 +262,22 @@ class TaskInfo
         if ($jobInfo !== null && !$jobInfo->getTaskInfos()->contains($this)) {
             $jobInfo->addTaskInfo($this);
         }
+    }
+
+    /**
+     * @param int $ordre
+     */
+    public function setOrdre($ordre)
+    {
+        $this->ordre = $ordre;
+    }
+
+    /**
+     * @return int
+     */
+    public function getOrdre()
+    {
+        return $this->ordre;
     }
 
     /**

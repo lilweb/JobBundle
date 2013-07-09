@@ -17,28 +17,42 @@
 </head>
 <body>
 
-    <div class="container">
-        <div class="day">
-            <div class="date">
-                <span class="day">19</span>
-                <br />
-                <span class="month">Jun</span>
-            </div>
+    <div id="application">
 
-            <div id="jobs">
-                <ul class="jobs">
-                </ul>
-            </div>
+        <div class="loadNextDay">
+            <a class="loadNext" href="#" title="Charger la journée précédente">+</a>
         </div>
     </div>
+
+    <!-- Représente une journée -->
+    <script id="dayTemplate" type="text/template">
+        <div class="day" id="day-<%= id %>">
+            <div class="date">
+                <span class="day"><%= moment(date).format("DD") %></span>
+                <br />
+                <span class="month"><%= moment(date).format("MMM") %></span>
+            </div>
+
+            <div class="jobs">
+                <ul class="jobs"></ul>
+            </div>
+        </div>
+    </script>
 
     <!-- Template du job -->
     <script id="jobTemplate" type="text/template">
         <small><%= moment.unix(dateCreation).format("H:mm") %> -</small>
 
+        <div class="runner">
+            <%= runner %>
+        </div>
+
         <div class="actions">
             <a href="#"><i class="icon-repeat"></i></a>
-            <a href="#"><i class="icon-remove"></i></a>
+
+            <% if (status == 0 || status == 1) { %>
+                <a href="#"><i class="icon-remove"></i></a>
+            <% }%>
         </div>
 
         <% if (status == 1) { %>
@@ -50,7 +64,10 @@
         <% } else { %>
             <div class="infos" data-id="<%= id %>">
         <% } %>
-            <span><%= name %></span>
+
+            <span>
+                <%= name %>
+            </span>
 
             <div class="params">
                 <ul>
@@ -60,7 +77,10 @@
                 </ul>
             </div>
         </div>
+    </script>
 
+    <script id="jobTemplateEmpty" type="text/template">
+        <i>Aucun job pour ce jour...</i>
     </script>
 
     <!-- Template des task -->
@@ -73,8 +93,10 @@
         <small><%= moment.unix(dateCreation).format("H:mm") %> - </small>
 
         <div class="actions">
-            <a href="#"><i class="icon-repeat"></i></a>
-            <a href="#"><i class="icon-level-down"></i></a>
+            <% if (status == 2 || status == 3) { %>
+                <a href="#" title="Relancer" class="restartTask"><i class="icon-repeat"></i></a>
+            <% } %>
+            {#<a href="#"><i class="icon-level-down"></i></a>#}
         </div>
 
         <% if (status == 1) { %>
@@ -86,16 +108,17 @@
         <% } else { %>
             <div class="infos">
         <% } %>
-            <div class="params">
-                <a href="#">
 
+            <div class="params">
+                <% if (message != "") { %>
+                <a href="#" class="showMessage">
                     <i class="icon-warning-sign"></i>
                 </a>
+                <% } %>
             </div>
 
             <span><%= name %></span>
         </div>
-
     </script>
 
 </body>

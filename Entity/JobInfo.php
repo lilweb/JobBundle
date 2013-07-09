@@ -73,6 +73,16 @@ class JobInfo
      *
      * @ORM\Column(
      *     type     = "datetime",
+     *     name     = "creation_date"
+     * )
+     */
+    private $creationDate;
+
+    /**
+     * @var \DateTime The date
+     *
+     * @ORM\Column(
+     *     type     = "datetime",
      *     name     = "last_status_update_date"
      * )
      */
@@ -96,6 +106,7 @@ class JobInfo
     public function __construct()
     {
         $this->taskInfos = new ArrayCollection();
+        $this->creationDate = new \DateTime();
     }
 
     /**
@@ -289,5 +300,21 @@ class JobInfo
         foreach ($parameters as $name => $value) {
             $this->setParameter($name, $value);
         }
+    }
+
+    /**
+     * @param \DateTime $creationDate
+     */
+    public function setCreationDate($creationDate)
+    {
+        $this->creationDate = $creationDate;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getCreationDate()
+    {
+        return $this->creationDate;
     }
 }

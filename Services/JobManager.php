@@ -43,27 +43,31 @@ class JobManager
             throw new \Exception("Le job '" . $jobName. "' n'a pu être trouvé!");
         }
 
-        $task = $job->getTasks()->first();
-
-        // Création de la tache
-        $taskInfo = new TaskInfo();
-        $taskInfo->setName($task->getName());
-        $taskInfo->setStatus(TaskInfo::TASK_WAITING);
-
-        // Création du job
+        // Création du job dans un premier temps.
         $jobInfo = new JobInfo();
         $jobInfo->setName($job->getName());
-        $jobInfo->addTaskInfo($taskInfo);
         $jobInfo->setJobRunner($launcher);
         $jobInfo->setExecutionDate(new \DateTime());
         $jobInfo->setLastStatusUpdateDate(new \DateTime());
 
+        // Injection des paramètres.
         foreach ($params as $paramName => $paramValue) {
             $jobInfo->setParameter($paramName, $paramValue);
         }
 
-        $this->em->persist($taskInfo);
         $this->em->persist($jobInfo);
+
+        // Création des taches du job
+        $nbTaches = 0;
+        foreach ($job->getTasks() as $task) {
+            $taskInfo = new TaskInfo();
+            $taskInfo->setName($task->getName());
+            $taskInfo->setStatus(TaskInfo::TASK_WAITING);
+            $taskInfo->setJobInfo($jobInfo);
+            $taskInfo->setOrdre($nbTaches++);
+
+            $this->em->persist($taskInfo);
+        }
 
         $this->em->flush();
     }

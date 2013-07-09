@@ -6,11 +6,19 @@ body {
     margin-top: 30px;
 }
 
-#container {
-    margin: 0 auto;
-    width: 940px;
-    min-height: 500px;
-    height: 100%;
+div.loadNextDay {
+    clear: both;
+    width: 50px;
+    font-size: x-large;
+    margin-top: 50px;
+    text-align: center;
+
+    a {
+        color: gray;
+        &:hover {
+            text-decoration: none;
+        }
+    }
 }
 
 div.day {
@@ -39,16 +47,17 @@ div.day {
         }
     }
 
-    div#jobs {
+    div.jobs {
         float: left;
-        width: 800px;
+        width: 850px;
+
+        padding-bottom: 10px;
+        border-left: 2px solid gray;
 
         ul.jobs {
             margin-left: 0px;
             margin-top: 0px;
-
             padding-left: 20px;
-            border-left: 2px solid gray;
 
             padding-top: 10px;
             padding-bottom: 0px;
@@ -63,7 +72,6 @@ div.day {
             }
 
             & > li:last-child {
-
                 div.actions {
                     border-bottom: 1px solid lightgray;
                 }
@@ -80,13 +88,13 @@ div.day {
                 }
 
                 div.infos {
-                    width: 710px;
+                    width: 620px;
 
                     border: 1px solid lightgray;
                     border-left: 10px solid lightgray;
                     border-bottom: none;
 
-                    margin-left: 45px;
+                    margin-left: 43px;
                     padding: 5px;
 
                     &.running {
@@ -117,6 +125,8 @@ div.day {
                     float: right;
                     padding: 6px;
                     padding-bottom: 5px;
+                    width: 44px;
+                    height: 20px;
 
                     color: white;
                     border-bottom: 1px solid white;
@@ -134,11 +144,18 @@ div.day {
                         }
                     }
                 }
+
+                div.runner {
+                    float: right;
+                    padding: 6px;
+                    width: 79px;
+                    padding-bottom: 5px;
+                    font-style: italic;
+                }
             }
         }
 
-
-        ul.jobs ul.tasks:last-of-type div {
+        ul.jobs ul.tasks div {
             border-bottom: 1px solid lightgray;
         }
 
@@ -150,7 +167,7 @@ div.day {
             list-style: none;
 
             margin-left: 80px;
-            width: 698px;
+            width: 659px;
 
             li {
                 small {
@@ -160,7 +177,7 @@ div.day {
 
                 div.infos {
                     float: left;
-                    width: 578px;
+                    width: 539px;
                     padding: 5px;
                     margin-left: 5px;
 
@@ -187,14 +204,16 @@ div.day {
                 div.actions {
                     float: right;
                     padding: 5px;
+                    width: 44px;
+                    height: 20px;
 
                     color: gray;
                     border-left: 1px solid lightgray;
                     border-right: 1px solid lightgray;
 
                     a, a:visited {
-                        display: inline-block;
                         width: 20px;
+                        display: inline-block;
                         text-align: center;
                         text-decoration: none;
                         color: gray;
@@ -216,7 +235,7 @@ ul.jobs > li.active {
     margin-bottom: 0px;
 }
 
-ul.jobs > li:hover {
+ul.jobs > li:hover div.infos {
     cursor: pointer;
 }
 

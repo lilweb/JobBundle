@@ -1,23 +1,45 @@
-# Démarrage de l'application
-$ ->
-    application = new Application()
-    application.setParameters "magasin", ""
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+baseUrl = "http://ping.me/app_dev.php"
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+$ ->
     console.log "Starting application"
+    application = new Application()
+
+    # L'event ne semble pas être catché dans l'application, on le sort donc.
+    $(".loadNextDay").click (event) ->
+        event.preventDefault()
+        event.stopPropagation()
+        application.loadNextDay()
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 class Application extends Backbone.View
-    el: $("#container")
-    parameters: null
+    el: $("#application")
+    lastId: null
+    lastDate: null
 
+    # Chargement de la premiere journée ie. ajd
     initialize: ->
-        this.jobsView = new JobsView()
+        this.lastDate = new Date()
+        this.lastId = 0
+        this.loadDay(this.lastDate)
 
-    setParameters: (parameters) ->
-        this.parameters = parameters
+    loadDay: (date) ->
+        dayView = new DayView(date, this.lastId + 1)
+        $("#application .loadNextDay").before(dayView.render())
+
+    loadNextDay: ->
+        this.lastId = this.lastId + 1
+        this.lastDate = new Date(this.lastDate.setDate(this.lastDate.getDate() - 1))
+        this.loadDay(this.lastDate)
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -41,10 +63,6 @@ class Task extends Backbone.Model
         dateUpdate: null
         status: null
 
-class Parameter extends Backbone.Model
-    defaults:
-        nom: null
-
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -52,7 +70,12 @@ class Parameter extends Backbone.Model
 # La collection des jobs.
 class JobsCollection extends Backbone.Collection
     model: Job
-    url: "http://ping.me/app_dev.php/api/v1/jobs.json"
+
+    initialize: (date) ->
+        this.date = date
+
+    url: ->
+        baseUrl + "/api/v1/jobs/" + this.date.getFullYear() + "/" + (this.date.getMonth() + 1)+ "/" + this.date.getDate() + "/list.json"
 
 # La collection de taches d'un job.
 class TaskCollection extends Backbone.Collection
@@ -64,7 +87,7 @@ class TaskCollection extends Backbone.Collection
 
     url: ->
         if @id
-            "http://ping.me/app_dev.php/api/v1/tasks/" + @id + ".json"
+            baseUrl + "/api/v1/tasks/" + @id + ".json"
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -74,14 +97,29 @@ class TaskCollection extends Backbone.Collection
 class TaskView extends Backbone.View
     tagName: "li"
 
+    events:
+        "click .showMessage" : "showMessage"
+        "click .restartTask" : "restart"
+
     initialize: ->
         this.model.bind "change", this.render
 
     render: ->
         tmpl = _.template($("#taskTemplate").html())
-        console.log this.model
         this.$el.html(tmpl(this.model.toJSON()))
         this
+
+    showMessage: (event) ->
+        event.preventDefault()
+        event.stopPropagation()
+        alert this.model.toJSON().message
+
+    restart: (event) ->
+        event.preventDefault()
+        event.stopPropagation()
+
+        if window.confirm "Vous êtes sur de vouloir relancer cette tache ainsi que les suivantes?"
+            console.log "Restart", this.model.toJSON().id
 
 # La vue des taches d'un job
 class TasksView extends Backbone.View
@@ -132,20 +170,35 @@ class JobView extends Backbone.View
             this.tasksView = null
             this.$el.toggleClass "open"
 
-# La vue de tout les jobs
-class JobsView extends Backbone.View
-    $el: $("#jobs")
+# La vue d'une journee
+class DayView extends Backbone.View
+    id: null
+    date: null
 
-    initialize: ->
-        this.collection = new JobsCollection()
+    initialize: (date, id) ->
+        this.id = id
+        this.date = date
+        this.render
+
+        this.collection = new JobsCollection(date)
         this.collection.bind "add", this.renderJob, this
-        this.collection.fetch()
+        this.collection.fetch
+            success: =>
+                if this.collection.length == 0
+                    this.renderEmpty()
+
+    render: ->
+        tmpl = _.template($("#dayTemplate").html())
+        tmpl
+            "id": this.id
+            "date" : this.date
+
+    renderEmpty: ->
+        $("#day-" + this.id + " ul.jobs").append(_.template($("#jobTemplateEmpty").html()))
 
     renderJob: (job) ->
         this.collection.add job
         jobView = new JobView
             model: job
-        $("ul.jobs").append(jobView.render().el)
-
-
+        $("#day-" + this.id + " ul.jobs").append(jobView.render().el)
 

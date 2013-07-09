@@ -3,9 +3,9 @@ Lilweb_job_application:
     pattern: /jobs/application
     defaults: { _controller: LilwebJobBundle:Application:index }
 
-# La liste des jobs
-Listing_jobs_v1:
-    pattern: /api/v1/jobs.json
+# La liste des jobs de la journée
+Listing_jobs_day_v1:
+    pattern: /api/v1/jobs/{year}/{month}/{day}/list.json
     defaults:  { _controller: LilwebJobBundle:JsonAPI:getJobsForDay }
 
 # La liste des taches par job
