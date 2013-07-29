@@ -9,6 +9,8 @@ namespace Lilweb\JobBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
+ * Représente une tache d'un job.
+ *
  * @ORM\Entity(repositoryClass = "Lilweb\JobBundle\Repository\TaskInfoRepository")
  * @ORM\Table(name = "task_infos")
  */
@@ -59,29 +61,40 @@ class TaskInfo
      * )
      *
      * @ORM\JoinColumn(
-     *     name                 = "job_info_id",
-     *     referencedColumnName = "id"
+     *      name                 = "job_info_id",
+     *      referencedColumnName = "id",
+     *      onDelete             = "CASCADE"
      * )
      */
     private $jobInfo;
 
     /**
+     * @var integer L'ordre de la tache dans le job. s
+     *
+     * @ORM\Column(
+     *      name = "ordre",
+     *      type = "integer"
+     * )
+     */
+    private $ordre;
+
+    /**
      * @var \DateTime The date the at which the task began.
      *
      * @ORM\Column(
-     *     type     = "datetime",
-     *     nullable = true,
-     *     name     = "execution_date"
+     *      type     = "datetime",
+     *      name     = "creation_date"
      * )
      */
-    private $executionDate;
+    private $creationDate;
 
     /**
      * @var \DateTime The date
      *
      * @ORM\Column(
-     *     type     = "datetime",
-     *     name     = "last_status_update_date"
+     *      type     = "datetime",
+     *      name     = "last_update_date",
+     *      nullable = true
      * )
      */
     private $lastStatusUpdateDate;
@@ -103,7 +116,8 @@ class TaskInfo
      */
     public function __construct()
     {
-        $this->executionDate = new \DateTime();
+        $this->creationDate = new \DateTime();
+        $this->status = TaskInfo::TASK_WAITING;
     }
 
     /**
@@ -148,18 +162,24 @@ class TaskInfo
             throw new \InvalidArgumentException('Invalid status');
         }
 
-        if ($status === self::TASK_RUNNING) {
-            $this->setExecutionDate(new \DateTime());
-        }
-
         $this->setLastStatusUpdateDate(new \DateTime());
-        
-        // Si le job existe déjà a ce stade, on change la date de maj.
-        if ($this->getJobInfo() != null) {
-            $this->getJobInfo()->setLastStatusUpdateDate(new \DateTime());
-        }
-
         $this->status = $status;
+    }
+
+    /**
+     * @param int $ordre
+     */
+    public function setOrdre($ordre)
+    {
+        $this->ordre = $ordre;
+    }
+
+    /**
+     * @return int
+     */
+    public function getOrdre()
+    {
+        return $this->ordre;
     }
 
     /**
@@ -203,19 +223,27 @@ class TaskInfo
     }
 
     /**
-     * @return \DateTime
+     * @param \DateTime $creationDate
      */
-    public function getExecutionDate()
+    public function setCreationDate($creationDate)
     {
-        return $this->executionDate;
+        $this->creationDate = $creationDate;
     }
 
     /**
-     * @param \DateTime $executionDate
+     * @return \DateTime
      */
-    public function setExecutionDate(\DateTime $executionDate)
+    public function getCreationDate()
     {
-        $this->executionDate = $executionDate;
+        return $this->creationDate;
+    }
+
+    /**
+     * @param \DateTime $lastStatusUpdateDate
+     */
+    public function setLastStatusUpdateDate($lastStatusUpdateDate)
+    {
+        $this->lastStatusUpdateDate = $lastStatusUpdateDate;
     }
 
     /**
@@ -224,14 +252,6 @@ class TaskInfo
     public function getLastStatusUpdateDate()
     {
         return $this->lastStatusUpdateDate;
-    }
-
-    /**
-     * @param \DateTime $lastStatusUpdateDate
-     */
-    public function setLastStatusUpdateDate(\DateTime $lastStatusUpdateDate)
-    {
-        $this->lastStatusUpdateDate = $lastStatusUpdateDate;
     }
 
     /**

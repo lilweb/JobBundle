@@ -37,9 +37,10 @@ class JobInfo
      * @var \Doctrine\Common\Collections\ArrayCollection
      *
      * @ORM\OneToMany(
-     *     targetEntity = "\Lilweb\JobBundle\Entity\TaskInfo",
-     *     mappedBy     = "jobInfo",
-     *     cascade      = { "persist", "remove" }
+     *      targetEntity  = "\Lilweb\JobBundle\Entity\TaskInfo",
+     *      mappedBy      = "jobInfo",
+     *      cascade       = { "all" },
+     *      orphanRemoval = true
      * )
      *
      * @ORM\OrderBy({"executionDate" = "ASC"})
@@ -50,9 +51,9 @@ class JobInfo
      * @var string Name of the person who's run the job.
      *
      * @ORM\Column(
-     *     type   = "string",
-     *     length = 255,
-     *     name   = "job_runner"
+     *      name   = "job_runner",
+     *      type   = "string",
+     *      length = 255
      * )
      */
     private $jobRunner;
