@@ -58,25 +58,14 @@ class JobInfo
     private $jobRunner;
 
     /**
-     * @var \DateTime The date the at which the task began.
+     * @var \DateTime La date de création du job.
      *
      * @ORM\Column(
-     *     type     = "datetime",
-     *     nullable = true,
-     *     name     = "execution_date"
+     *      name = "creation_date",
+     *      type = "datetime"
      * )
      */
-    private $executionDate;
-
-    /**
-     * @var \DateTime The date
-     *
-     * @ORM\Column(
-     *     type     = "datetime",
-     *     name     = "last_status_update_date"
-     * )
-     */
-    private $lastStatusUpdateDate;
+    private $creationDate;
 
     /**
      * @var String Tableau sérialisé qui contient les différents parametres du job.
@@ -96,6 +85,7 @@ class JobInfo
     public function __construct()
     {
         $this->taskInfos = new ArrayCollection();
+        $this->creationDate = new \DateTime();
     }
 
     /**
@@ -183,37 +173,6 @@ class JobInfo
         $this->jobRunner = $jobRunner;
     }
 
-    /**
-     * @return \DateTime
-     */
-    public function getExecutionDate()
-    {
-        return $this->executionDate;
-    }
-
-    /**
-     * @param \DateTime $executionDate
-     */
-    public function setExecutionDate(\DateTime $executionDate)
-    {
-        $this->executionDate = $executionDate;
-    }
-
-    /**
-     * @return \DateTime
-     */
-    public function getLastStatusUpdateDate()
-    {
-        return $this->lastStatusUpdateDate;
-    }
-
-    /**
-     * @param \DateTime $lastStatusUpdateDate
-     */
-    public function setLastStatusUpdateDate(\DateTime $lastStatusUpdateDate)
-    {
-        $this->lastStatusUpdateDate = $lastStatusUpdateDate;
-    }
 
     /**
      * Encode et décode les parametres d'un job.
@@ -257,6 +216,7 @@ class JobInfo
     /**
      * Retourne la value du parametre si elle existe.
      *
+     * @param $name
      * @return String
      */
     public function getParameter($name)
