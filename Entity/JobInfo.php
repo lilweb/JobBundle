@@ -43,7 +43,7 @@ class JobInfo
      *      orphanRemoval = true
      * )
      *
-     * @ORM\OrderBy({"executionDate" = "ASC"})
+     * @ORM\OrderBy({"creationDate" = "ASC"})
      */
     private $taskInfos;
 
@@ -174,6 +174,21 @@ class JobInfo
         $this->jobRunner = $jobRunner;
     }
 
+    /**
+     * @param \DateTime $creationDate
+     */
+    public function setCreationDate($creationDate)
+    {
+        $this->creationDate = $creationDate;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getCreationDate()
+    {
+        return $this->creationDate;
+    }
 
     /**
      * Encode et décode les parametres d'un job.

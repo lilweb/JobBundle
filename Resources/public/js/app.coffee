@@ -1,23 +1,27 @@
+baseUrl = "http://ping.me/app_dev.php"
+
 # Démarrage de l'application
 $ ->
-    application = new Application()
-    application.setParameters "magasin", ""
-
-    console.log "Starting application"
+    application = new Application(new Date)
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 class Application extends Backbone.View
-    el: $("#container")
-    parameters: null
+    currentDate: null
+    el: "#container"
 
-    initialize: ->
-        this.jobsView = new JobsView()
+    events:
+        'click a.nextDay' : 'loadNextDay'
 
-    setParameters: (parameters) ->
-        this.parameters = parameters
+    loadNextDay: ->
+        this.currentDate = moment(moment(this.currentDate)).add('days', -1).toDate()
+        new JobsView(this.currentDate)
+
+    initialize: (date) ->
+        this.currentDate = date
+        new JobsView(this.currentDate)
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -29,7 +33,6 @@ class Job extends Backbone.Model
         id: null
         name: null
         dateCreation: null
-        dateUpdate: null
         status: null
 
 # Représente une tache
@@ -52,7 +55,16 @@ class Parameter extends Backbone.Model
 # La collection des jobs.
 class JobsCollection extends Backbone.Collection
     model: Job
-    url: "http://ping.me/app_dev.php/api/v1/jobs.json"
+    date: null
+
+    initialize: (date) ->
+        this.date = date
+
+    url: ->
+        if this.date != null
+            baseUrl + "/api/v1/jobs/" + this.date.getFullYear() + "/" + (this.date.getMonth() + 1) + "/" + this.date.getDate() + "/list.json"
+        else
+            throw "The date has to be defined"
 
 # La collection de taches d'un job.
 class TaskCollection extends Backbone.Collection
@@ -63,8 +75,10 @@ class TaskCollection extends Backbone.Collection
         this.id = id
 
     url: ->
-        if @id
+        if this.id
             "http://ping.me/app_dev.php/api/v1/tasks/" + @id + ".json"
+        else
+            throw "The ID has to be defined"
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -134,18 +148,25 @@ class JobView extends Backbone.View
 
 # La vue de tout les jobs
 class JobsView extends Backbone.View
-    $el: $("#jobs")
+    date: null
 
-    initialize: ->
-        this.collection = new JobsCollection()
+    initialize: (date) ->
+        this.date = date
+        this.collection = new JobsCollection(date)
         this.collection.bind "add", this.renderJob, this
         this.collection.fetch()
+        this.render()
+
+    render: ->
+        tmpl = _.template($("#dayTemplate").html())
+        console.log this.date
+        $("#container").append(tmpl(
+            "date" : this.date
+        ))
 
     renderJob: (job) ->
         this.collection.add job
         jobView = new JobView
             model: job
         $("ul.jobs").append(jobView.render().el)
-
-
 

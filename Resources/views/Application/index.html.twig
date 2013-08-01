@@ -17,20 +17,25 @@
 </head>
 <body>
 
-    <div class="container">
-        <div class="day">
+    <div id="container">
+        <a class="nextDay" href="#">suivnat</a>
+    </div>
+
+    <script id="dayTemplate" type="text/template">
+
+        <div class="day" id="day">
             <div class="date">
-                <span class="day">19</span>
+                <span class="day"><%= moment(date).format("DD") %></span>
                 <br />
-                <span class="month">Jun</span>
+                <span class="month"><%= moment(date).format("MMM") %></span>
             </div>
 
-            <div id="jobs">
+            <div class="jobsList">
                 <ul class="jobs">
                 </ul>
             </div>
         </div>
-    </div>
+    </script>
 
     <!-- Template du job -->
     <script id="jobTemplate" type="text/template">
@@ -88,7 +93,6 @@
         <% } %>
             <div class="params">
                 <a href="#">
-
                     <i class="icon-warning-sign"></i>
                 </a>
             </div>
