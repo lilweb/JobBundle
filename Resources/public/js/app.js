@@ -24,7 +24,7 @@
     Application.prototype.el = "#container";
 
     Application.prototype.events = {
-      'click a.nextDay': 'loadNextDay'
+      'click div.nextDay a': 'loadNextDay'
     };
 
     Application.prototype.loadNextDay = function() {
@@ -142,7 +142,7 @@
 
     TaskCollection.prototype.url = function() {
       if (this.id) {
-        return "http://ping.me/app_dev.php/api/v1/tasks/" + this.id + ".json";
+        return baseUrl + "/api/v1/tasks/" + this.id + ".json";
       } else {
         throw "The ID has to be defined";
       }
@@ -273,20 +273,28 @@
     JobsView.prototype.date = null;
 
     JobsView.prototype.initialize = function(date) {
+      var _this = this;
       this.date = date;
       this.collection = new JobsCollection(date);
       this.collection.bind("add", this.renderJob, this);
-      this.collection.fetch();
+      this.collection.fetch({
+        success: function(collection, result) {
+          if (collection.length === 0) {
+            return $("#" + _this.cid + " ul.jobs").append($("#jobTemplateEmpty").html());
+          }
+        }
+      }, this);
       return this.render();
     };
 
     JobsView.prototype.render = function() {
-      var tmpl;
+      var data, tmpl;
+      data = {
+        "date": this.date,
+        "cid": this.cid
+      };
       tmpl = _.template($("#dayTemplate").html());
-      console.log(this.date);
-      return $("#container").append(tmpl({
-        "date": this.date
-      }));
+      return $("#container div.nextDay").before(tmpl(data));
     };
 
     JobsView.prototype.renderJob = function(job) {
@@ -295,7 +303,7 @@
       jobView = new JobView({
         model: job
       });
-      return $("ul.jobs").append(jobView.render().el);
+      return $("#" + this.cid + " ul.jobs").append(jobView.render().el);
     };
 
     return JobsView;

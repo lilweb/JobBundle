@@ -34,8 +34,8 @@ class JobInfoRepository extends EntityRepository
         $finJournee->setTime(23,59,59);
 
         return $this->createQueryBuilder('j')
-            ->where('j.creationDate < :debut')
-            ->andWhere('j.creationDate >= :fin')
+            ->where('j.creationDate > :debut')
+            ->andWhere('j.creationDate <= :fin')
             ->setParameter('debut', $debutJournee)
             ->setParameter('fin', $finJournee)
             ->getQuery()

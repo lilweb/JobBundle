@@ -18,12 +18,15 @@
 <body>
 
     <div id="container">
-        <a class="nextDay" href="#">suivnat</a>
+
+        <div class="nextDay">
+            <a href="#" title="Charger la journée suivante">+</a>
+        </div>
     </div>
 
+    <!-- Template pour une journee -->
     <script id="dayTemplate" type="text/template">
-
-        <div class="day" id="day">
+        <div class="day" id="<%= cid %>">
             <div class="date">
                 <span class="day"><%= moment(date).format("DD") %></span>
                 <br />
@@ -65,7 +68,10 @@
                 </ul>
             </div>
         </div>
+    </script>
 
+    <script id="jobTemplateEmpty" type="text/template">
+        <span>Aucun job pour ce jour...</span>
     </script>
 
     <!-- Template des task -->

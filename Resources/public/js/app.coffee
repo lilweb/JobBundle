@@ -13,7 +13,7 @@ class Application extends Backbone.View
     el: "#container"
 
     events:
-        'click a.nextDay' : 'loadNextDay'
+        'click div.nextDay a' : 'loadNextDay'
 
     loadNextDay: ->
         this.currentDate = moment(moment(this.currentDate)).add('days', -1).toDate()
@@ -76,7 +76,7 @@ class TaskCollection extends Backbone.Collection
 
     url: ->
         if this.id
-            "http://ping.me/app_dev.php/api/v1/tasks/" + @id + ".json"
+            baseUrl + "/api/v1/tasks/" + @id + ".json"
         else
             throw "The ID has to be defined"
 
@@ -154,19 +154,22 @@ class JobsView extends Backbone.View
         this.date = date
         this.collection = new JobsCollection(date)
         this.collection.bind "add", this.renderJob, this
-        this.collection.fetch()
+        this.collection.fetch
+            success: (collection, result) =>
+                if (collection.length == 0)
+                    $("#" + this.cid + " ul.jobs").append($("#jobTemplateEmpty").html())
+            , this
         this.render()
 
     render: ->
-        tmpl = _.template($("#dayTemplate").html())
-        console.log this.date
-        $("#container").append(tmpl(
+        data =
             "date" : this.date
-        ))
+            "cid" : this.cid
+        tmpl = _.template($("#dayTemplate").html())
+        $("#container div.nextDay").before(tmpl(data))
 
     renderJob: (job) ->
         this.collection.add job
         jobView = new JobView
             model: job
-        $("ul.jobs").append(jobView.render().el)
-
+        $("#" + this.cid + " ul.jobs").append(jobView.render().el)

@@ -1,8 +1,10 @@
+@textColor: #696969;
+
 body {
     background-color: white;
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 
-    color: #696969;
+    color: @textColor;
     margin-top: 30px;
 }
 
@@ -11,6 +13,22 @@ body {
     width: 940px;
     min-height: 500px;
     height: 100%;
+
+    div.nextDay {
+        font-size: xx-large;
+        width: 55px;
+        text-align: center;
+        clear: both;
+
+        margin-top: 50px;
+
+        a, a.visited {
+            color: @textColor;
+            &:hover {
+                text-decoration: none;
+            }
+        }
+    }
 }
 
 div.day {
@@ -39,13 +57,14 @@ div.day {
         }
     }
 
-    div#jobs {
+    div.jobsList {
         float: left;
         width: 800px;
 
         ul.jobs {
             margin-left: 0px;
             margin-top: 0px;
+            min-height: 50px;
 
             padding-left: 20px;
             border-left: 2px solid gray;
