@@ -1,6 +1,6 @@
 [
     {% for job in jobs %}
-        {% include 'LilwebJobBundle:JsonAPI:partial/job.json.twig' with { "job" : job } only %}
+        {% include 'LilwebJobBundle:JsonAPI:partial/job.json.twig' with { "job" : job, "columns" : columns } only %}
         {% if not loop.last %},{% endif %}
     {% endfor %}
 ]

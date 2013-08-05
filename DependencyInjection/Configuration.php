@@ -24,7 +24,13 @@ class Configuration implements ConfigurationInterface
         $rootNode = $treeBuilder->root('lilweb_job');
         $rootNode
             ->children()
-                ->scalarNode('job_file')->isRequired()->cannotBeEmpty()->end()
+                ->scalarNode('job_file')
+                    ->isRequired()
+                    ->cannotBeEmpty()
+                ->end()
+                ->arrayNode('columns')
+                    ->prototype('scalar')
+                ->end()
             ->end();
 
         return $treeBuilder;

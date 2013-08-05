@@ -62,9 +62,9 @@
 
             <div class="params">
                 <ul>
-                    <li>FRS</li>
-                    <li>1002</li>
-                    <li>31</li>
+                <% for (var key in parameters) { %>
+                     <li><%= parameters[key] %></li>
+                <% } %>
                 </ul>
             </div>
         </div>

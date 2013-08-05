@@ -15,7 +15,9 @@ class Application extends Backbone.View
     events:
         'click div.nextDay a' : 'loadNextDay'
 
-    loadNextDay: ->
+    loadNextDay: (event) ->
+        event.preventDefault()
+        event.stopPropagation()
         this.currentDate = moment(moment(this.currentDate)).add('days', -1).toDate()
         new JobsView(this.currentDate)
 
@@ -44,10 +46,6 @@ class Task extends Backbone.Model
         dateUpdate: null
         status: null
 
-class Parameter extends Backbone.Model
-    defaults:
-        nom: null
-
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -59,6 +57,7 @@ class JobsCollection extends Backbone.Collection
 
     initialize: (date) ->
         this.date = date
+        
 
     url: ->
         if this.date != null

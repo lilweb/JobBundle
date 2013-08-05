@@ -2,5 +2,10 @@
     "id" : {{ job.id }},
     "name" : "{{ job.name }}",
     "dateCreation" : {{ job.creationDate | date('U') }},
-    "status" : {{ job.lastStatus }}
+    "status" : {{ job.lastStatus }},
+    "parameters": {
+        {% for column in columns %}
+            "{{ column }}" : "{{ job.getParameter(column) }}"{% if not loop.last %},{% endif %}
+        {% endfor %}
+    }
 }

@@ -28,9 +28,13 @@ class JsonAPIController extends Controller
     {
         // Récupération de la liste des taches
         $jobs = $this->getDoctrine()->getRepository('LilwebJobBundle:JobInfo')->findForDay($annee, $mois, $jour);
+        $columns = $this->container->getParameter('lilweb_job_bundle.columns');
 
         // Mise en page des résultats.
-        $content = $this->renderView('LilwebJobBundle:JsonAPI:jobs.json.twig', array('jobs' => $jobs));
+        $content = $this->renderView('LilwebJobBundle:JsonAPI:jobs.json.twig', array(
+            'jobs'   => $jobs,
+            'columns' => $columns
+        ));
 
         return new Response($content, 200, array('Content-Type' => 'application/json'));
     }

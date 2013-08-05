@@ -27,6 +27,7 @@ class LilwebJobExtension extends Extension
         $configuration = new Configuration();
 
         $config = $this->processConfiguration($configuration, $configs);
+        $container->setParameter('lilweb_job_bundle.columns', $config['columns']);
         $container->setParameter('lilweb_job_bundle.job_file', $config['job_file']);
     }
 }

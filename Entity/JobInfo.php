@@ -266,4 +266,12 @@ class JobInfo
             $this->setParameter($name, $value);
         }
     }
+
+    /**
+     * @return array
+     */
+    public function getParameters()
+    {
+        return $this->decodeParameters($this->parameters);
+    }
 }
