@@ -51,6 +51,10 @@
       return _ref1;
     }
 
+    Job.prototype.url = function() {
+      return baseUrl + "/api/v1/job/" + this.id + ".json";
+    };
+
     Job.prototype.defaults = {
       id: null,
       name: null,
@@ -70,6 +74,10 @@
       _ref2 = Task.__super__.constructor.apply(this, arguments);
       return _ref2;
     }
+
+    Task.prototype.url = function() {
+      return baseUrl + "/api/v1/task/" + this.id + ".json";
+    };
 
     Task.prototype.defaults = {
       id: null,
@@ -131,7 +139,7 @@
 
     TaskCollection.prototype.url = function() {
       if (this.id) {
-        return baseUrl + "/api/v1/tasks/" + this.id + ".json";
+        return baseUrl + "/api/v1/job/tasks/" + this.id + ".json";
       } else {
         throw "The ID has to be defined";
       }
@@ -156,14 +164,20 @@
     };
 
     TaskView.prototype.initialize = function() {
-      return this.model.bind("change", this.render);
+      return this.model.bind("sync", this.updateRender);
     };
 
     TaskView.prototype.render = function() {
       var tmpl;
       tmpl = _.template($("#taskTemplate").html());
-      this.$el.html(tmpl(this.model.toJSON()));
+      this.$el.attr('id', 'task-' + this.model.toJSON().id).html(tmpl(this.model.toJSON()));
       return this;
+    };
+
+    TaskView.prototype.updateRender = function() {
+      var tmpl;
+      tmpl = _.template($("#taskTemplate").html());
+      return $("#task-" + this.id).html(tmpl(this.toJSON()));
     };
 
     TaskView.prototype.showMessage = function() {
@@ -208,6 +222,12 @@
       return $("#tasks-" + this.id).append(taskView.render().el);
     };
 
+    TasksView.prototype.update = function() {
+      return this.collection.each(function(task) {
+        return task.fetch();
+      });
+    };
+
     return TasksView;
 
   })(Backbone.View);
@@ -225,18 +245,22 @@
     JobView.prototype.tasksView = null;
 
     JobView.prototype.events = {
-      'click .infos': 'afficherTasks'
-    };
-
-    JobView.prototype.initialize = function() {
-      return this.model.bind("change", this.render);
+      'click .infos': 'afficherTasks',
+      'click .restartJob': 'restartJob',
+      'click .abandonJob': 'abandonJob'
     };
 
     JobView.prototype.render = function() {
       var tmpl;
       tmpl = _.template($("#jobTemplate").html());
-      this.$el.html(tmpl(this.model.toJSON()));
+      this.$el.attr('id', 'jobs-' + this.model.toJSON().id).html(tmpl(this.model.toJSON()));
       return this;
+    };
+
+    JobView.prototype.updateRender = function() {
+      var tmpl;
+      tmpl = _.template($("#jobTemplate").html());
+      return $("#jobs-" + this.model.id).html(tmpl(this.model.toJSON()));
     };
 
     JobView.prototype.afficherTasks = function(event) {
@@ -251,6 +275,24 @@
         this.$el.next("ul.tasks").remove();
         this.tasksView = null;
         return this.$el.toggleClass("open");
+      }
+    };
+
+    JobView.prototype.restartJob = function() {
+      $.get(baseUrl + "/api/v1/jobs/restart/" + this.model.toJSON().id);
+      this.model.set("globalStatus", 0);
+      this.updateRender();
+      if (this.tasksView !== null) {
+        return this.tasksView.update();
+      }
+    };
+
+    JobView.prototype.abandonJob = function() {
+      $.get(baseUrl + "/api/v1/jobs/abandon/" + this.model.toJSON().id);
+      this.model.set("globalStatus", 4);
+      this.updateRender();
+      if (this.tasksView !== null) {
+        return this.tasksView.update();
       }
     };
 

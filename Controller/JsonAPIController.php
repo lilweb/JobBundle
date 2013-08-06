@@ -6,6 +6,9 @@
  */
 namespace Lilweb\JobBundle\Controller;
 
+use Lilweb\JobBundle\Entity\JobInfo;
+use Lilweb\JobBundle\Entity\TaskInfo;
+
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -41,6 +44,10 @@ class JsonAPIController extends Controller
 
     /**
      * Retourne la liste des taches pour un job donné
+     *
+     * @param $id L'identifiant du job dont il faut afficher les taches.
+     *
+     * @return Response
      */
     public function getTasksForJobAction($id)
     {
@@ -57,5 +64,91 @@ class JsonAPIController extends Controller
         );
 
         return new Response($content, 200, array('Content-Type' => 'application/json'));
+    }
+
+    /**
+     * Retourne le job en question.
+     *
+     * @param $jobInfo JobInfo Le job à afficher.
+     *
+     * @return Response
+     */
+    public function getJobAction(JobInfo $jobInfo)
+    {
+        $columns = $this->container->getParameter('lilweb_job_bundle.columns');
+        $content = $this->renderView(
+            'LilwebJobBundle:JsonAPI:partial/job.json.twig',
+            array(
+                'job'     => $jobInfo,
+                'columns' => $columns
+            )
+        );
+
+        return new Response($content, 200, array('Content-Type' => 'application/json'));
+    }
+
+    /**
+     * Retourne les informations de la tache.
+     *
+     * @param $taskInfo TaskInfo La tache à afficher.
+     *
+     * @return Response
+     */
+    public function getTaskAction(TaskInfo $taskInfo)
+    {
+        $content = $this->renderView('LilwebJobBundle:JsonAPI:partial/task.json.twig', array('task' => $taskInfo));
+
+        return new Response($content, 200, array('Content-Type' => 'application/json'));
+    }
+
+    /**
+     * Redémarre le job en question
+     *
+     * @param $jobInfo JobInfo Le job à redémarrer
+     *
+     * @return Response
+     */
+    public function restartJobAction(JobInfo $jobInfo)
+    {
+        foreach ($jobInfo->getTaskInfos() as $taskInfo) {
+            $taskInfo->setStatus(TaskInfo::TASK_WAITING);
+        }
+
+        $this->getDoctrine()->getManager()->flush();
+
+        return new Response('', 200, array('Content-Type' => 'application/json'));
+    }
+
+    /**
+     * Permets d'abandonner un job.
+     *
+     * @param $job JobInfo Le job qu'il faut abandonné.
+     *
+     * @return Response
+     */
+    public function abandonJobAction(JobInfo $job)
+    {
+        foreach ($job->getTaskInfos() as $taskInfo) {
+            $taskInfo->setStatus(TaskInfo::TASK_DROPPED);
+        }
+
+        $this->getDoctrine()->getManager()->flush();
+
+        return new Response('', 200, array('Content-Type' => 'application/json'));
+    }
+
+    /**
+     * Relance une tache en erreur.
+     *
+     * @param TaskInfo $taskInfo
+     *
+     * @return Response
+     */
+    public function restartTask(TaskInfo $taskInfo)
+    {
+        $taskInfo->setStatus(TaskInfo::TASK_WAITING);
+        $this->getDoctrine()->getManager()->flush();
+
+        return new Response('', 200, array('Content-Type' => 'application/json'));
     }
 }

@@ -85,6 +85,9 @@ div.day div.jobs ul.jobs > li div.infos.success {
 div.day div.jobs ul.jobs > li div.infos.error {
   border-left: 10px solid lightcoral;
 }
+div.day div.jobs ul.jobs > li div.infos.dropped {
+  text-decoration: line-through;
+}
 div.day div.jobs ul.jobs > li div.infos div.params {
   float: right;
 }
@@ -138,6 +141,9 @@ div.day div.jobs ul.tasks li div.infos {
   padding: 5px;
   border-bottom: 1px solid lightgray;
   border-left: 10px solid lightgray;
+}
+div.day div.jobs ul.tasks li div.infos.dropped {
+  text-decoration: line-through;
 }
 div.day div.jobs ul.tasks li div.infos.running {
   border-left: 10px solid lightblue;

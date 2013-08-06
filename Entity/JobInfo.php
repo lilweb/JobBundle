@@ -110,6 +110,10 @@ class JobInfo
         $nombreTermine = 0;
         foreach ($this->taskInfos as $taskInfo) {
 
+            if ($taskInfo->getStatus() == TaskInfo::TASK_SKIPPED) {
+                break;
+            }
+
             // En cours
             if ($taskInfo->getStatus() == TaskInfo::TASK_RUNNING) {
                 return TaskInfo::TASK_RUNNING;
@@ -132,6 +136,8 @@ class JobInfo
 
         if ($nombreTermine == 0) {
             return TaskInfo::TASK_WAITING;
+        } else if ($nombreTermine == count($this->taskInfos)) {
+            return TaskInfo::TASK_OVER;
         } else {
             return TaskInfo::TASK_RUNNING;
         }

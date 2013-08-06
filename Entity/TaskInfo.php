@@ -21,6 +21,7 @@ class TaskInfo
     const TASK_OVER    = 2;
     const TASK_FAIL    = 3;
     const TASK_DROPPED = 4;
+    const TASK_SKIPPED = 5;
 
     /**
      * @ORM\Id

@@ -31,6 +31,9 @@ class Application extends Backbone.View
 
 # Représente un job
 class Job extends Backbone.Model
+    url: ->
+        baseUrl + "/api/v1/job/" + this.id + ".json"
+
     defaults:
         id: null
         name: null
@@ -40,6 +43,10 @@ class Job extends Backbone.Model
 
 # Représente une tache
 class Task extends Backbone.Model
+
+    url: ->
+        baseUrl + "/api/v1/task/" + this.id + ".json"
+
     defaults:
         id: null
         name: null
@@ -77,7 +84,7 @@ class TaskCollection extends Backbone.Collection
 
     url: ->
         if this.id
-            baseUrl + "/api/v1/tasks/" + @id + ".json"
+            baseUrl + "/api/v1/job/tasks/" + @id + ".json"
         else
             throw "The ID has to be defined"
 
@@ -93,12 +100,16 @@ class TaskView extends Backbone.View
         'click .message' : 'showMessage'
 
     initialize: ->
-        this.model.bind "change", this.render
+        this.model.bind "sync", this.updateRender
 
     render: ->
         tmpl = _.template($("#taskTemplate").html())
-        this.$el.html(tmpl(this.model.toJSON()))
+        this.$el.attr('id', 'task-' + this.model.toJSON().id).html(tmpl(this.model.toJSON()))
         this
+
+    updateRender: ->
+        tmpl = _.template($("#taskTemplate").html())
+        $("#task-" + this.id).html(tmpl(this.toJSON()))
 
     showMessage: ->
         alert(this.model.toJSON().message)
@@ -124,6 +135,10 @@ class TasksView extends Backbone.View
             model: task
         $("#tasks-" + @id).append(taskView.render().el)
 
+    update: ->
+        this.collection.each (task) ->
+            task.fetch()
+
 # La vue d'un seul job
 class JobView extends Backbone.View
     tagName: "li"
@@ -131,14 +146,17 @@ class JobView extends Backbone.View
 
     events:
         'click .infos' : 'afficherTasks'
-
-    initialize: ->
-        this.model.bind "change", this.render
+        'click .restartJob' : 'restartJob'
+        'click .abandonJob' : 'abandonJob'
 
     render: ->
         tmpl = _.template($("#jobTemplate").html())
-        this.$el.html(tmpl(this.model.toJSON()))
+        this.$el.attr('id', 'jobs-' + this.model.toJSON().id).html(tmpl(this.model.toJSON()))
         this
+
+    updateRender: ->
+        tmpl = _.template($("#jobTemplate").html())
+        $("#jobs-" + this.model.id).html(tmpl(this.model.toJSON()))
 
     afficherTasks: (event) ->
         if not this.tasksView?
@@ -151,6 +169,20 @@ class JobView extends Backbone.View
             this.$el.next("ul.tasks").remove()
             this.tasksView = null
             this.$el.toggleClass "open"
+
+    restartJob: ->
+        $.get baseUrl + "/api/v1/jobs/restart/" + this.model.toJSON().id
+        this.model.set "globalStatus", 0
+        this.updateRender()
+        if this.tasksView != null
+            this.tasksView.update()
+
+    abandonJob: ->
+        $.get baseUrl + "/api/v1/jobs/abandon/" + this.model.toJSON().id
+        this.model.set "globalStatus", 4
+        this.updateRender()
+        if this.tasksView != null
+            this.tasksView.update()
 
 # La vue de tout les jobs
 class JobsView extends Backbone.View

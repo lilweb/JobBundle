@@ -54,10 +54,11 @@
             <div class="infos success" data-id="<%= id %>">
         <% } else if (globalStatus == 3) { %>
             <div class="infos error" data-id="<%= id %>">
+        <% } else if (globalStatus == 4) { %>
+            <div class="infos dropped" data-id="<%= id %>">
         <% } else { %>
             <div class="infos" data-id="<%= id %>">
         <% } %>
-
             <span><%= name %></span>
 
             <div class="params">
@@ -70,8 +71,8 @@
         </div>
 
         <div class="actions">
-            <a href="#"><i class="icon-repeat"></i></a>
-            <a href="#"><i class="icon-remove"></i></a>
+            <a href="#" class="restartJob"><i class="icon-repeat"></i></a>
+            <a href="#" class="abandonJob"><i class="icon-remove"></i></a>
         </div>
 
         <div class="startedBy">
@@ -101,6 +102,8 @@
             <div class="infos success">
         <% } else if (status == 3) { %>
             <div class="infos error">
+        <% } else if (status == 4) { %>
+            <div class="infos dropped">
         <% } else { %>
             <div class="infos">
         <% } %>

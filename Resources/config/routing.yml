@@ -3,12 +3,49 @@ Lilweb_job_application:
     pattern: /jobs/application
     defaults: { _controller: LilwebJobBundle:Application:index }
 
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# JOBS
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 # La liste des jobs
 Listing_jobs_v1:
     pattern: /api/v1/jobs/{annee}/{mois}/{jour}/list.json
     defaults:  { _controller: LilwebJobBundle:JsonAPI:getJobsForDay }
 
+# Retourne le job
+Get_job_v1:
+    pattern: /api/v1/job/{id}.json
+    defaults: { _controller: LilwebJobBundle:JsonAPI:getJob }
+
 # La liste des taches par job
 Listing_tasks_job_v1:
-    pattern: /api/v1/tasks/{id}.json
+    pattern: /api/v1/job/tasks/{id}.json
     defaults: { _controller: LilwebJobBundle:JsonAPI:getTasksForJob }
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# TASKS
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+# Retourne la tache
+Get_task_v1:
+    pattern: /api/v1/task/{id}.json
+    defaults: { _controller: LilwebJobBundle:JsonAPI:getTask }
+
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+# JOBS ACTIONS
+Restart_job_v1:
+    pattern: /api/v1/jobs/restart/{id}
+    defaults: { _controller: LilwebJobBundle:JsonAPI:restartJob}
+
+Abandon_job_v1:
+    pattern: /api/v1/jobs/abandon/{id}
+    defaults: { _controller: LilwebJobBundle:JsonAPI:abandonJob }
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+# TASKS ACTIONS
+Restart_task_v1:
+    pattern: /api/v1/tasks/restart/{id}
+    defaults: { _controller: LilwebJobBundle:JsonAPI:restartTask}
