@@ -3,5 +3,6 @@
     "name" : "{{ task.name }}",
     "dateCreation" : {{ task.creationDate | date('U') }},
     "dateUpdate" : {{ task.lastStatusUpdateDate | date('U') }},
-    "status" : {{ task.status }}
+    "status" : "{{ task.status }}",
+    "message" : "{{ task.infoMsg }}"
 }

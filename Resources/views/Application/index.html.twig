@@ -19,6 +19,7 @@
 
     <div id="container">
 
+
         <div class="nextDay">
             <a href="#" title="Charger la journée suivante">+</a>
         </div>
@@ -27,26 +28,24 @@
     <!-- Template pour une journee -->
     <script id="dayTemplate" type="text/template">
         <div class="day" id="<%= cid %>">
+
             <div class="date">
                 <span class="day"><%= moment(date).format("DD") %></span>
                 <br />
                 <span class="month"><%= moment(date).format("MMM") %></span>
             </div>
 
-            <div class="jobsList">
-                <ul class="jobs">
-                </ul>
+            <div class="jobs">
+                <ul class="jobs"></ul>
             </div>
         </div>
     </script>
 
     <!-- Template du job -->
     <script id="jobTemplate" type="text/template">
-        <small><%= moment.unix(dateCreation).format("H:mm") %> -</small>
 
-        <div class="actions">
-            <a href="#"><i class="icon-repeat"></i></a>
-            <a href="#"><i class="icon-remove"></i></a>
+        <div class="date">
+            <small><%= moment.unix(dateCreation).format("H:mm") %> -</small>
         </div>
 
         <% if (status == 1) { %>
@@ -58,15 +57,25 @@
         <% } else { %>
             <div class="infos" data-id="<%= id %>">
         <% } %>
+
             <span><%= name %></span>
 
             <div class="params">
                 <ul>
-                <% for (var key in parameters) { %>
-                     <li><%= parameters[key] %></li>
-                <% } %>
+                    <% for (var key in parameters) { %>
+                    <li><%= parameters[key] %></li>
+                    <% } %>
                 </ul>
             </div>
+        </div>
+
+        <div class="actions">
+            <a href="#"><i class="icon-repeat"></i></a>
+            <a href="#"><i class="icon-remove"></i></a>
+        </div>
+
+        <div class="startedBy">
+            <span><%= startedBy %></span>
         </div>
     </script>
 
@@ -81,11 +90,9 @@
 
     <!-- Template d'une seule tache -->
     <script id="taskTemplate" type="text/template">
-        <small><%= moment.unix(dateCreation).format("H:mm") %> - </small>
 
-        <div class="actions">
-            <a href="#"><i class="icon-repeat"></i></a>
-            <a href="#"><i class="icon-level-down"></i></a>
+        <div class="date">
+            <small><%= moment.unix(dateCreation).format("H:mm") %> - </small>
         </div>
 
         <% if (status == 1) { %>
@@ -98,12 +105,19 @@
             <div class="infos">
         <% } %>
             <div class="params">
-                <a href="#">
-                    <i class="icon-warning-sign"></i>
+                <a href="#" class="message">
+                    <% if (message != "") { %>
+                        <i class="icon-warning-sign"></i>
+                    <% } %>
                 </a>
             </div>
 
             <span><%= name %></span>
+        </div>
+
+        <div class="actions">
+            <a href="#"><i class="icon-repeat"></i></a>
+            <a href="#"><i class="icon-level-down"></i></a>
         </div>
 
     </script>

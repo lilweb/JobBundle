@@ -75,7 +75,9 @@
       name: null,
       dateCreation: null,
       dateUpdate: null,
-      status: null
+      startedBy: null,
+      status: null,
+      message: null
     };
 
     return Task;
@@ -148,6 +150,10 @@
 
     TaskView.prototype.tagName = "li";
 
+    TaskView.prototype.events = {
+      'click .message': 'showMessage'
+    };
+
     TaskView.prototype.initialize = function() {
       return this.model.bind("change", this.render);
     };
@@ -155,9 +161,12 @@
     TaskView.prototype.render = function() {
       var tmpl;
       tmpl = _.template($("#taskTemplate").html());
-      console.log(this.model);
       this.$el.html(tmpl(this.model.toJSON()));
       return this;
+    };
+
+    TaskView.prototype.showMessage = function() {
+      return alert(this.model.toJSON().message);
     };
 
     return TaskView;

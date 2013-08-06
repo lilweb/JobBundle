@@ -46,11 +46,11 @@ div.day div.date div.day .date {
   float: left;
   width: 50px;
 }
-div.day div.jobsList {
+div.day div.jobs {
   float: left;
-  width: 800px;
+  width: 880px;
 }
-div.day div.jobsList ul.jobs {
+div.day div.jobs ul.jobs {
   margin-left: 0px;
   margin-top: 0px;
   min-height: 50px;
@@ -60,131 +60,115 @@ div.day div.jobsList ul.jobs {
   padding-bottom: 0px;
   list-style: none;
 }
-div.day div.jobsList ul.jobs li.open div.infos {
-  border-bottom: 1px solid lightgray;
-}
-div.day div.jobsList ul.jobs > li:last-child div.infos {
-  border-bottom: 1px solid lightgray;
-}
-div.day div.jobsList ul.jobs > li:last-child div.actions {
-  border-bottom: 1px solid lightgray;
-}
-div.day div.jobsList ul.jobs > li {
+div.day div.jobs ul.jobs > li {
   clear: both;
-  text-align: left;
+  width: 100%;
 }
-div.day div.jobsList ul.jobs > li small {
-  display: block;
+div.day div.jobs ul.jobs > li div.date {
   float: left;
-  line-height: 30px;
-}
-div.day div.jobsList ul.jobs > li div.infos {
-  width: 710px;
-  border: 1px solid lightgray;
-  border-left: 10px solid lightgray;
-  border-bottom: none;
-  margin-left: 45px;
+  width: 5%;
   padding: 5px;
 }
-div.day div.jobsList ul.jobs > li div.infos.running {
+div.day div.jobs ul.jobs > li div.infos {
+  float: left;
+  width: 80%;
+  border: 1px solid lightgray;
+  border-left: 10px solid lightgray;
+  padding: 5px;
+}
+div.day div.jobs ul.jobs > li div.infos.running {
   border-left: 10px solid lightblue;
 }
-div.day div.jobsList ul.jobs > li div.infos.success {
+div.day div.jobs ul.jobs > li div.infos.success {
   border-left: 10px solid lightgreen;
 }
-div.day div.jobsList ul.jobs > li div.infos.error {
+div.day div.jobs ul.jobs > li div.infos.error {
   border-left: 10px solid lightcoral;
 }
-div.day div.jobsList ul.jobs > li div.infos div.params {
+div.day div.jobs ul.jobs > li div.infos div.params {
   float: right;
 }
-div.day div.jobsList ul.jobs > li div.infos div.params ul li {
+div.day div.jobs ul.jobs > li div.infos div.params ul li {
   border: none;
   width: 60px;
   text-align: center;
   display: inline-block;
 }
-div.day div.jobsList ul.jobs > li div.actions {
-  float: right;
+div.day div.jobs ul.jobs > li div.actions {
+  float: left;
   padding: 6px;
   padding-bottom: 5px;
   color: white;
   border-bottom: 1px solid white;
   background-color: gray;
 }
-div.day div.jobsList ul.jobs > li div.actions a,
-div.day div.jobsList ul.jobs > li div.actions a:visited {
+div.day div.jobs ul.jobs > li div.actions a,
+div.day div.jobs ul.jobs > li div.actions a:visited {
   display: inline-block;
   width: 20px;
   color: white;
   text-align: center;
   text-decoration: none;
 }
-div.day div.jobsList ul.jobs > li div.actions a:hover,
-div.day div.jobsList ul.jobs > li div.actions a:visited:hover {
+div.day div.jobs ul.jobs > li div.actions a:hover,
+div.day div.jobs ul.jobs > li div.actions a:visited:hover {
   text-decoration: none;
 }
-div.day div.jobsList ul.jobs ul.tasks:last-of-type div {
-  border-bottom: 1px solid lightgray;
-}
-div.day div.jobsList ul.tasks {
-  background-color: white;
-  /*box-shadow: -2px 0px 5px -2px black;*/
-
-  text-align: left;
-  list-style: none;
-  margin-left: 80px;
-  width: 698px;
-}
-div.day div.jobsList ul.tasks li small {
-  float: left;
-  line-height: 30px;
-}
-div.day div.jobsList ul.tasks li div.infos {
-  float: left;
-  width: 578px;
+div.day div.jobs ul.jobs > li div.startedBy {
   padding: 5px;
-  margin-left: 5px;
+  float: left;
+}
+div.day div.jobs ul.tasks {
+  clear: both;
+  margin-left: 80px;
+  width: 100%;
+}
+div.day div.jobs ul.tasks li {
+  clear: both;
+  width: 100%;
+  list-style: none;
+}
+div.day div.jobs ul.tasks li div.date {
+  float: left;
+  padding: 5px;
+}
+div.day div.jobs ul.tasks li div.infos {
+  float: left;
+  width: 70%;
+  padding: 5px;
+  border-bottom: 1px solid lightgray;
   border-left: 10px solid lightgray;
 }
-div.day div.jobsList ul.tasks li div.infos.running {
+div.day div.jobs ul.tasks li div.infos.running {
   border-left: 10px solid lightblue;
 }
-div.day div.jobsList ul.tasks li div.infos.success {
+div.day div.jobs ul.tasks li div.infos.success {
   border-left: 10px solid lightgreen;
 }
-div.day div.jobsList ul.tasks li div.infos.error {
+div.day div.jobs ul.tasks li div.infos.error {
   border-left: 10px solid lightcoral;
 }
-div.day div.jobsList ul.tasks li div.params {
+div.day div.jobs ul.tasks li div.params {
   float: right;
   border: 0px !important;
 }
-div.day div.jobsList ul.tasks li div.actions {
-  float: right;
+div.day div.jobs ul.tasks li div.actions {
+  float: left;
   padding: 5px;
   color: gray;
   border-left: 1px solid lightgray;
   border-right: 1px solid lightgray;
 }
-div.day div.jobsList ul.tasks li div.actions a,
-div.day div.jobsList ul.tasks li div.actions a:visited {
+div.day div.jobs ul.tasks li div.actions a,
+div.day div.jobs ul.tasks li div.actions a:visited {
   display: inline-block;
   width: 20px;
   text-align: center;
   text-decoration: none;
   color: gray;
 }
-div.day div.jobsList ul.tasks li div.actions a:hover,
-div.day div.jobsList ul.tasks li div.actions a:visited:hover {
+div.day div.jobs ul.tasks li div.actions a:hover,
+div.day div.jobs ul.tasks li div.actions a:visited:hover {
   color: black;
   text-decoration: none;
-}
-/** ACTIF **/
-ul.jobs > li.active {
-  border: 1px solid lightgray;
-  margin-bottom: 0px;
-}
-ul.jobs > li:hover {
-  cursor: pointer;
 }

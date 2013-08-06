@@ -44,7 +44,9 @@ class Task extends Backbone.Model
         name: null
         dateCreation: null
         dateUpdate: null
+        startedBy: null
         status: null
+        message: null
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -58,7 +60,6 @@ class JobsCollection extends Backbone.Collection
     initialize: (date) ->
         this.date = date
         
-
     url: ->
         if this.date != null
             baseUrl + "/api/v1/jobs/" + this.date.getFullYear() + "/" + (this.date.getMonth() + 1) + "/" + this.date.getDate() + "/list.json"
@@ -87,14 +88,19 @@ class TaskCollection extends Backbone.Collection
 class TaskView extends Backbone.View
     tagName: "li"
 
+    events:
+        'click .message' : 'showMessage'
+
     initialize: ->
         this.model.bind "change", this.render
 
     render: ->
         tmpl = _.template($("#taskTemplate").html())
-        console.log this.model
         this.$el.html(tmpl(this.model.toJSON()))
         this
+
+    showMessage: ->
+        alert(this.model.toJSON().message)
 
 # La vue des taches d'un job
 class TasksView extends Backbone.View
