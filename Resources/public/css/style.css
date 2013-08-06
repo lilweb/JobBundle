@@ -77,12 +77,15 @@ div.day div.jobs ul.jobs > li div.infos {
   padding: 5px;
 }
 div.day div.jobs ul.jobs > li div.infos.running {
-  border-left: 10px solid lightblue;
+  background-color: #ffffe5;
+  border-left: 10px solid #cccc00;
 }
 div.day div.jobs ul.jobs > li div.infos.success {
+  background-color: #e8fce8;
   border-left: 10px solid lightgreen;
 }
 div.day div.jobs ul.jobs > li div.infos.error {
+  background-color: #fdf2f2;
   border-left: 10px solid lightcoral;
 }
 div.day div.jobs ul.jobs > li div.infos.dropped {
@@ -142,17 +145,23 @@ div.day div.jobs ul.tasks li div.infos {
   border-bottom: 1px solid lightgray;
   border-left: 10px solid lightgray;
 }
-div.day div.jobs ul.tasks li div.infos.dropped {
-  text-decoration: line-through;
-}
 div.day div.jobs ul.tasks li div.infos.running {
-  border-left: 10px solid lightblue;
+  background-color: #ffffe5;
+  border-left: 10px solid #cccc00;
 }
 div.day div.jobs ul.tasks li div.infos.success {
+  background-color: #e8fce8;
   border-left: 10px solid lightgreen;
 }
 div.day div.jobs ul.tasks li div.infos.error {
+  background-color: #fdf2f2;
   border-left: 10px solid lightcoral;
+}
+div.day div.jobs ul.tasks li div.infos.skipped {
+  background-color: #f5f5f5;
+}
+div.day div.jobs ul.tasks li div.infos.dropped {
+  text-decoration: line-through;
 }
 div.day div.jobs ul.tasks li div.params {
   float: right;

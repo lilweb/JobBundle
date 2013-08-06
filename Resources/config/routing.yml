@@ -47,5 +47,9 @@ Abandon_job_v1:
 
 # TASKS ACTIONS
 Restart_task_v1:
-    pattern: /api/v1/tasks/restart/{id}
+    pattern: /api/v1/task/restart/{id}
     defaults: { _controller: LilwebJobBundle:JsonAPI:restartTask}
+
+Skip_task_v1:
+    pattern: /api/v1/task/skip/{id}
+    defaults: { _controller: LilwebJobBundle:JsonAPI:skipTask }

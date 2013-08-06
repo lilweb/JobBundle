@@ -159,7 +159,7 @@ class TaskInfo
      */
     public function setStatus($status)
     {
-        if (!is_int($status) || !in_array($status, array(self::TASK_WAITING, self::TASK_RUNNING, self::TASK_FAIL, self::TASK_OVER, self::TASK_DROPPED))) {
+        if (!is_int($status) || !in_array($status, array(self::TASK_WAITING, self::TASK_RUNNING, self::TASK_FAIL, self::TASK_OVER, self::TASK_DROPPED, self::TASK_SKIPPED))) {
             throw new \InvalidArgumentException('Invalid status');
         }
 

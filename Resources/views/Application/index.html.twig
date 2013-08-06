@@ -48,7 +48,9 @@
             <small><%= moment.unix(dateCreation).format("H:mm") %> -</small>
         </div>
 
-        <% if (globalStatus == 1) { %>
+        <% if (globalStatus == 0) { %>
+            <div class="infos waiting" data-id="<%= id %>">
+        <% } else if (globalStatus == 1) { %>
             <div class="infos running" data-id="<%= id %>">
         <% } else if (globalStatus == 2) { %>
             <div class="infos success" data-id="<%= id %>">
@@ -71,8 +73,8 @@
         </div>
 
         <div class="actions">
-            <a href="#" class="restartJob"><i class="icon-repeat"></i></a>
-            <a href="#" class="abandonJob"><i class="icon-remove"></i></a>
+            <a href="#" title="Relancer tout le job" class="restartJob"><i class="icon-repeat"></i></a>
+            <a href="#" title="Abandonner le job" class="abandonJob"><i class="icon-remove"></i></a>
         </div>
 
         <div class="startedBy">
@@ -96,7 +98,9 @@
             <small><%= moment.unix(dateCreation).format("H:mm") %> - </small>
         </div>
 
-        <% if (status == 1) { %>
+        <% if (status == 0) { %>
+            <div class="infos waiting">
+        <% } else if (status == 1) { %>
             <div class="infos running">
         <% } else if (status == 2) { %>
             <div class="infos success">
@@ -104,25 +108,30 @@
             <div class="infos error">
         <% } else if (status == 4) { %>
             <div class="infos dropped">
+        <% } else if (status == 5) { %>
+            <div class="infos skipped">
         <% } else { %>
             <div class="infos">
         <% } %>
             <div class="params">
                 <a href="#" class="message">
                     <% if (message != "") { %>
-                        <i class="icon-warning-sign"></i>
+                        <i title="Message d'erreur" class="icon-warning-sign"></i>
                     <% } %>
                 </a>
             </div>
 
-            <span><%= name %></span>
+            <% if (status == 5) { %>
+                <span class="skipped"><%= name %> (skipped)</span>
+            <% } else { %>
+                <span><%= name %></span>
+            <% } %>
         </div>
 
         <div class="actions">
-            <a href="#"><i class="icon-repeat"></i></a>
-            <a href="#"><i class="icon-level-down"></i></a>
+            <a href="#" class="restartTask" title="Relancer"><i class="icon-repeat"></i></a>
+            <a href="#" class="skipTask" title="Passer cette tache"><i class="icon-level-down"></i></a>
         </div>
-
     </script>
 
 </body>

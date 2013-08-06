@@ -4,7 +4,7 @@
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  baseUrl = "http://ping.me/app_dev.php";
+  baseUrl = "";
 
   $(function() {
     var application;
@@ -160,7 +160,9 @@
     TaskView.prototype.tagName = "li";
 
     TaskView.prototype.events = {
-      'click .message': 'showMessage'
+      'click .message': 'showMessage',
+      'click .restartTask': 'restartTask',
+      'click .skipTask': 'skipTask'
     };
 
     TaskView.prototype.initialize = function() {
@@ -178,6 +180,14 @@
       var tmpl;
       tmpl = _.template($("#taskTemplate").html());
       return $("#task-" + this.id).html(tmpl(this.toJSON()));
+    };
+
+    TaskView.prototype.restartTask = function() {
+      return $.get(baseUrl + "/api/v1/task/restart/" + this.model.toJSON().id);
+    };
+
+    TaskView.prototype.skipTask = function() {
+      return $.get(baseUrl + "/api/v1/task/skip/" + this.model.toJSON().id);
     };
 
     TaskView.prototype.showMessage = function() {

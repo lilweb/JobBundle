@@ -1,4 +1,4 @@
-baseUrl = "http://ping.me/app_dev.php"
+baseUrl = ""
 
 # Démarrage de l'application
 $ ->
@@ -98,6 +98,8 @@ class TaskView extends Backbone.View
 
     events:
         'click .message' : 'showMessage'
+        'click .restartTask' : 'restartTask'
+        'click .skipTask' : 'skipTask'
 
     initialize: ->
         this.model.bind "sync", this.updateRender
@@ -107,9 +109,15 @@ class TaskView extends Backbone.View
         this.$el.attr('id', 'task-' + this.model.toJSON().id).html(tmpl(this.model.toJSON()))
         this
 
-    updateRender: ->
+    updateRender:  ->
         tmpl = _.template($("#taskTemplate").html())
         $("#task-" + this.id).html(tmpl(this.toJSON()))
+
+    restartTask: ->
+        $.get baseUrl + "/api/v1/task/restart/" + this.model.toJSON().id
+
+    skipTask: ->
+        $.get baseUrl + "/api/v1/task/skip/" + this.model.toJSON().id
 
     showMessage: ->
         alert(this.model.toJSON().message)

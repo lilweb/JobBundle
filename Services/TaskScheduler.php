@@ -58,13 +58,10 @@ class TaskScheduler
             $currentlyRunning = $this->container
                 ->get('doctrine.orm.entity_manager')
                 ->getRepository('LilwebJobBundle:TaskInfo')
-                ->getNumberOfRunningTasks();
+                ->getNumberOfRunningTasks($waitingTask->getName());
 
-            // TODO Gestion de la parallélisation
             if ($currentlyRunning == 0) {
                 $this->runTask($waitingTask);
-                $this->logger->debug('There are no waiting tasks');
-
                 break;
             }
         }

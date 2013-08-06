@@ -138,15 +138,36 @@ class JsonAPIController extends Controller
     }
 
     /**
-     * Relance une tache en erreur.
+     * Relance cette tache ainsi que les suivantes.
      *
-     * @param TaskInfo $taskInfo
+     * @param TaskInfo $taskInfo La tache a relancer.
      *
      * @return Response
      */
-    public function restartTask(TaskInfo $taskInfo)
+    public function restartTaskAction(TaskInfo $taskInfo)
     {
-        $taskInfo->setStatus(TaskInfo::TASK_WAITING);
+        $jobInfo = $taskInfo->getJobInfo();
+        foreach ($jobInfo->getTaskInfos() as $task) {
+            if ($task->getOrdre() >= $taskInfo->getOrdre()) {
+                $task->setStatus(TaskInfo::TASK_WAITING);
+            }
+        }
+
+        $this->getDoctrine()->getManager()->flush();
+
+        return new Response('', 200, array('Content-Type' => 'application/json'));
+    }
+
+    /**
+     * Permets de skipper une tache
+     *
+     * @param TaskInfo $taskInfo La tache à passer.
+     *
+     * @return Response
+     */
+    public function skipTaskAction(TaskInfo $taskInfo)
+    {
+        $taskInfo->setStatus(TaskInfo::TASK_SKIPPED);
         $this->getDoctrine()->getManager()->flush();
 
         return new Response('', 200, array('Content-Type' => 'application/json'));

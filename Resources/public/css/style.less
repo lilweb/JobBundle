@@ -93,14 +93,17 @@ div.day {
                     padding: 5px;
 
                     &.running {
-                        border-left: 10px solid lightblue;
+                        background-color: lighten(yellow, 45);
+                        border-left: 10px solid darken(yellow, 10);
                     }
 
                     &.success {
+                        background-color: lighten(lightgreen, 20);
                         border-left: 10px solid lightgreen;
                     }
 
                     &.error {
+                        background-color: lighten(lightcoral, 25);
                         border-left: 10px solid lightcoral;
                     }
 
@@ -173,20 +176,27 @@ div.day {
                     border-bottom: 1px solid lightgray;
                     border-left: 10px solid lightgray;
 
-                    &.dropped {
-                        text-decoration: line-through;
-                    }
-
                     &.running {
-                        border-left: 10px solid lightblue;
+                        background-color: lighten(yellow, 45);
+                        border-left: 10px solid darken(yellow, 10);
                     }
 
                     &.success {
+                        background-color: lighten(lightgreen, 20);
                         border-left: 10px solid lightgreen;
                     }
 
                     &.error {
+                        background-color: lighten(lightcoral, 25);
                         border-left: 10px solid lightcoral;
+                    }
+
+                    &.skipped {
+                        background-color: lighten(black, 96%);
+                    }
+
+                    &.dropped {
+                        text-decoration: line-through;
                     }
                 }
 

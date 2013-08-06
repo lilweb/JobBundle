@@ -41,12 +41,11 @@ class TaskInfoRepository extends EntityRepository
      */
     public function getWaitingTasks()
     {
-        return $this
-            ->createQueryBuilder('ti')
+        return $this->createQueryBuilder('ti')
             ->where('ti.status = :status')
+            ->andWhere('ti.ordre = (SELECT count(ti2.id) FROM Lilweb\JobBundle\Entity\TaskInfo ti2 where ti.jobInfo = ti2.jobInfo AND ti2.status = 2 AND ti2.ordre < ti.ordre)')
             ->setParameter('status', TaskInfo::TASK_WAITING)
-            ->orderBy('ti.executionDate', 'ASC')
-            ->setMaxResults(1)
+            ->orderBy('ti.creationDate', 'ASC')
             ->getQuery()
             ->getResult();
     }
@@ -72,26 +71,5 @@ class TaskInfoRepository extends EntityRepository
         }
 
         return $qb->getQuery()->getSingleScalarResult();
-    }
-
-    /**
-     * Gets a taskInfo object that is waiting to be executed.
-     *
-     * @param string $taskName The name of the task.
-     *
-     * @return \Lilweb\JobBundle\Entity\TaskInfo|null
-     */
-    public function getTaskInfoToExecute($taskName)
-    {
-        return $this
-            ->createQueryBuilder('ti')
-            ->where('ti.name = :taskName')
-            ->andWhere('ti.status = :status')
-            ->setParameter('taskName', $taskName)
-            ->setParameter('status', TaskInfo::TASK_WAITING)
-            ->orderBy('ti.executionDate', 'ASC')
-            ->setMaxResults(1)
-            ->getQuery()
-            ->getOneOrNullResult();
     }
 }
