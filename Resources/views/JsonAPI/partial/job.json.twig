@@ -3,7 +3,8 @@
     "name" : "{{ job.name }}",
     "dateCreation" : {{ job.creationDate | date('U') }},
     "startedBy" : "{{ job.jobRunner }}",
-    "status" : {{ job.lastStatus }},
+    "lastStatus" : {{ job.lastStatus }},
+    "globalStatus": "{{ job.getGlobalStatus }}",
     "parameters": {
         {% for column in columns %}
             "{{ column }}" : "{{ job.getParameter(column) }}"{% if not loop.last %},{% endif %}

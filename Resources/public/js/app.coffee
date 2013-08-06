@@ -35,7 +35,8 @@ class Job extends Backbone.Model
         id: null
         name: null
         dateCreation: null
-        status: null
+        lastStatus: null
+        globalStatus: null
 
 # Représente une tache
 class Task extends Backbone.Model

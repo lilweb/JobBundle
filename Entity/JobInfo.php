@@ -103,6 +103,41 @@ class JobInfo
     }
 
     /**
+     * Retourne le statut global du job.
+     */
+    public function getGlobalStatus()
+    {
+        $nombreTermine = 0;
+        foreach ($this->taskInfos as $taskInfo) {
+
+            // En cours
+            if ($taskInfo->getStatus() == TaskInfo::TASK_RUNNING) {
+                return TaskInfo::TASK_RUNNING;
+            }
+
+            // En echec
+            if ($taskInfo->getStatus() == TaskInfo::TASK_FAIL) {
+                return TaskInfo::TASK_FAIL;
+            }
+
+            // Abandonné.
+            if ($taskInfo->getStatus() == TaskInfo::TASK_DROPPED) {
+                return TaskInfo::TASK_DROPPED;
+            }
+
+            if ($taskInfo->getStatus() == TaskInfo::TASK_OVER) {
+                $nombreTermine++;
+            }
+        }
+
+        if ($nombreTermine == 0) {
+            return TaskInfo::TASK_WAITING;
+        } else {
+            return TaskInfo::TASK_RUNNING;
+        }
+    }
+
+    /**
      * @return integer
      */
     public function getId()

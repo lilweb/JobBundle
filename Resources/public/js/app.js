@@ -55,7 +55,8 @@
       id: null,
       name: null,
       dateCreation: null,
-      status: null
+      lastStatus: null,
+      globalStatus: null
     };
 
     return Job;

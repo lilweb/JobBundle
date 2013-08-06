@@ -48,11 +48,11 @@
             <small><%= moment.unix(dateCreation).format("H:mm") %> -</small>
         </div>
 
-        <% if (status == 1) { %>
+        <% if (globalStatus == 1) { %>
             <div class="infos running" data-id="<%= id %>">
-        <% } else if (status == 2) { %>
+        <% } else if (globalStatus == 2) { %>
             <div class="infos success" data-id="<%= id %>">
-        <% } else if (status == 3) { %>
+        <% } else if (globalStatus == 3) { %>
             <div class="infos error" data-id="<%= id %>">
         <% } else { %>
             <div class="infos" data-id="<%= id %>">
