@@ -31,8 +31,6 @@ class Application extends Backbone.View
 
 # Représente un job
 class Job extends Backbone.Model
-    url: ->
-        baseUrl + "/api/v1/job/" + this.id + ".json"
 
     defaults:
         id: null
@@ -41,11 +39,11 @@ class Job extends Backbone.Model
         lastStatus: null
         globalStatus: null
 
+    url: ->
+        baseUrl + "/api/v1/job/" + this.id + ".json"
+
 # Représente une tache
 class Task extends Backbone.Model
-
-    url: ->
-        baseUrl + "/api/v1/task/" + this.id + ".json"
 
     defaults:
         id: null
@@ -55,6 +53,9 @@ class Task extends Backbone.Model
         startedBy: null
         status: null
         message: null
+
+    url: ->
+        baseUrl + "/api/v1/task/" + this.id + ".json"
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -120,7 +121,7 @@ class TaskView extends Backbone.View
         $.get baseUrl + "/api/v1/task/skip/" + this.model.toJSON().id
 
     showMessage: ->
-        alert(this.model.toJSON().message)
+        alert(JSON.stringify(this.model.get "message"))
 
 # La vue des taches d'un job
 class TasksView extends Backbone.View

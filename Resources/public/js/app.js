@@ -51,16 +51,16 @@
       return _ref1;
     }
 
-    Job.prototype.url = function() {
-      return baseUrl + "/api/v1/job/" + this.id + ".json";
-    };
-
     Job.prototype.defaults = {
       id: null,
       name: null,
       dateCreation: null,
       lastStatus: null,
       globalStatus: null
+    };
+
+    Job.prototype.url = function() {
+      return baseUrl + "/api/v1/job/" + this.id + ".json";
     };
 
     return Job;
@@ -75,10 +75,6 @@
       return _ref2;
     }
 
-    Task.prototype.url = function() {
-      return baseUrl + "/api/v1/task/" + this.id + ".json";
-    };
-
     Task.prototype.defaults = {
       id: null,
       name: null,
@@ -87,6 +83,10 @@
       startedBy: null,
       status: null,
       message: null
+    };
+
+    Task.prototype.url = function() {
+      return baseUrl + "/api/v1/task/" + this.id + ".json";
     };
 
     return Task;
@@ -191,7 +191,7 @@
     };
 
     TaskView.prototype.showMessage = function() {
-      return alert(this.model.toJSON().message);
+      return alert(JSON.stringify(this.model.get("message")));
     };
 
     return TaskView;

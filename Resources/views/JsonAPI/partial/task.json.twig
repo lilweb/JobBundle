@@ -4,5 +4,5 @@
     "dateExecution" : {{ task.executionDate | date('U') }},
     "dateUpdate" : {{ task.lastStatusUpdateDate | date('U') }},
     "status" : "{{ task.status }}",
-    "message" : "{{ task.infoMsg }}"
+    "message" : "{{ task.infoMsg | replace({'\r\n': '', '\n': ''}) }}"
 }

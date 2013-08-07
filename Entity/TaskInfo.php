@@ -243,6 +243,13 @@ class TaskInfo
         return $this->executionDate;
     }
 
+    /**
+     * @param \DateTime $lastStatusUpdateDate
+     */
+    public function setLastStatusUpdateDate($lastStatusUpdateDate)
+    {
+        $this->lastStatusUpdateDate = $lastStatusUpdateDate;
+    }
 
     /**
      * @return \DateTime

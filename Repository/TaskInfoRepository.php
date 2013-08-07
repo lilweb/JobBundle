@@ -42,12 +42,35 @@ class TaskInfoRepository extends EntityRepository
     public function getWaitingTasks()
     {
         return $this->createQueryBuilder('ti')
+            ->join('ti.jobInfo', 'j')
             ->where('ti.status = :status')
-            ->andWhere('ti.ordre = (SELECT count(ti2.id) FROM Lilweb\JobBundle\Entity\TaskInfo ti2 where ti.jobInfo = ti2.jobInfo AND ti2.status = 2 AND ti2.ordre < ti.ordre)')
             ->setParameter('status', TaskInfo::TASK_WAITING)
-            ->orderBy('ti.id', 'ASC')
+            ->orderBy('j.creationDate')
+            ->addOrderBy('ti.ordre')
             ->getQuery()
             ->getResult();
+    }
+
+    /**
+     * Retourne vrai si les taches précédentes de ce job ont été faites.
+     *
+     * @return boolean
+     */
+    public function arePreviousTasksDone($taskInfo)
+    {
+        $nb = $this->createQueryBuilder('t')
+            ->select('COUNT(t.id) as nb')
+            ->where('t.jobInfo = :jobInfo')
+            ->andWhere('(t.status = :OVER OR t.status = :SKIPPED)')
+            ->andWhere('t.ordre < :ordre')
+            ->setParameter('OVER', TaskInfo::TASK_OVER)
+            ->setParameter('SKIPPED', TaskInfo::TASK_SKIPPED)
+            ->setParameter('ordre', $taskInfo->getOrdre())
+            ->setParameter('jobInfo', $taskInfo->getJobInfo()->getId())
+            ->getQuery()
+            ->getSingleScalarResult();
+
+        return ($nb == $taskInfo->getOrdre());
     }
 
     /**

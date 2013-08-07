@@ -42,7 +42,6 @@ class TaskScheduler
      */
     public function execute()
     {
-        $this->logger = $this->container->get('logger');
         $this->logger->debug('Début de l\'ordonancement');
 
         // Récupérer les jobs en attente d'execution par ordre de priorité
@@ -51,18 +50,36 @@ class TaskScheduler
             ->getRepository('LilwebJobBundle:TaskInfo')
             ->getWaitingTasks();
 
+        $this->logger->debug('Taches en attente : ' .  count($waitingTasks));
+
         // On cherche la premiere tache qui est executable
         foreach ($waitingTasks as $waitingTask) {
 
-            // On vérifie si y a déjà une tache en cours de ce type la.
-            $currentlyRunning = $this->container
+            $this->logger->debug('Testing task : #' . $waitingTask->getId());
+
+            // Check if all previous tasks are done
+            $allDone = $this->container
                 ->get('doctrine.orm.entity_manager')
                 ->getRepository('LilwebJobBundle:TaskInfo')
-                ->getNumberOfRunningTasks($waitingTask->getName());
+                ->arePreviousTasksDone($waitingTask);
 
-            if ($currentlyRunning == 0) {
-                $this->runTask($waitingTask);
-                break;
+            if (!$allDone) {
+                $this->logger->debug('Abandon task : #' . $waitingTask->getId() . " - previous tasks waiting");
+            } else {
+
+                // On vérifie si y a déjà une tache en cours de ce type la.
+                $currentlyRunning = $this->container
+                    ->get('doctrine.orm.entity_manager')
+                    ->getRepository('LilwebJobBundle:TaskInfo')
+                    ->getNumberOfRunningTasks($waitingTask->getName());
+
+                if ($currentlyRunning == 0) {
+                    $this->runTask($waitingTask);
+
+                    break;
+                }
+
+                $this->logger->debug('Abandon task : #' . $waitingTask->getId() . " - currently running " . $waitingTask->getName());
             }
         }
 

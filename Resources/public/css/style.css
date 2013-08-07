@@ -1,14 +1,21 @@
+html {
+  overflow-x: hidden;
+  width: 920px;
+}
 body {
   background-color: white;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   color: #696969;
   margin-top: 30px;
+  overflow: hidden;
+  width: 920px;
 }
 #container {
   margin: 0 auto;
-  width: 940px;
+  width: 920px;
   min-height: 500px;
   height: 100%;
+  overflow: hidden;
 }
 #container div.nextDay {
   font-size: xx-large;
@@ -48,7 +55,7 @@ div.day div.date div.day .date {
 }
 div.day div.jobs {
   float: left;
-  width: 880px;
+  width: 860px;
 }
 div.day div.jobs ul.jobs {
   margin-left: 0px;
@@ -71,7 +78,7 @@ div.day div.jobs ul.jobs > li div.date {
 }
 div.day div.jobs ul.jobs > li div.infos {
   float: left;
-  width: 80%;
+  width: 70%;
   border: 1px solid lightgray;
   border-left: 10px solid lightgray;
   padding: 5px;
@@ -123,10 +130,11 @@ div.day div.jobs ul.jobs > li div.actions a:visited:hover {
 div.day div.jobs ul.jobs > li div.startedBy {
   padding: 5px;
   float: left;
+  width: 13%;
 }
 div.day div.jobs ul.tasks {
   clear: both;
-  margin-left: 80px;
+  margin-left: 60px;
   width: 100%;
 }
 div.day div.jobs ul.tasks li {
@@ -140,7 +148,7 @@ div.day div.jobs ul.tasks li div.date {
 }
 div.day div.jobs ul.tasks li div.infos {
   float: left;
-  width: 70%;
+  width: 519px;
   padding: 5px;
   border-bottom: 1px solid lightgray;
   border-left: 10px solid lightgray;
