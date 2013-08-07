@@ -95,11 +95,6 @@ class TaskScheduler
             );
         }
 
-        // When running a job and it is its first task being executed
-        if ($taskInfo->getJobInfo()->getTaskInfos()->count() === 1) {
-            $taskInfo->getJobInfo()->setLastStatusUpdateDate(new \DateTime());
-        }
-
         // Execution de la tache
         try {
             $taskInfo->setStatus(TaskInfo::TASK_RUNNING);
@@ -119,27 +114,6 @@ class TaskScheduler
 
         // Logging
         $this->logger->debug('Fin du traitement, status: '.$taskInfo->getStatus());
-
-        // On ne crée la tache suivante que si la tache a réussi
-        if ($taskInfo->getStatus() == TaskInfo::TASK_OVER) {
-
-            // Planification de la tache suivante
-            $nextTaskName = $jobConfiguration->getNextTaskName($taskInfo->getName());
-            if ($nextTaskName != null) {
-                $this->logger->debug('Création de la tache suivante : ' . $nextTaskName);
-
-                // Création de la nouvelle tache.
-                $nextTask = new TaskInfo();
-                $nextTask->setJobInfo($taskInfo->getJobInfo());
-                $nextTask->setName($nextTaskName);
-                $nextTask->setStatus(TaskInfo::TASK_WAITING);
-
-                // On enregistre la nouvelle tache
-                $this->container->get('doctrine.orm.entity_manager')->persist($nextTask);
-            }
-        }
-
-        // Flush bdd
         $this->container->get('doctrine.orm.entity_manager')->flush();
     }
 }
