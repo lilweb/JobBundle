@@ -84,10 +84,11 @@ class TaskInfo
      *
      * @ORM\Column(
      *      type     = "datetime",
-     *      name     = "creation_date"
+     *      name     = "execution_date",
+     *      nullable = true
      * )
      */
-    private $creationDate;
+    private $executionDate;
 
     /**
      * @var \DateTime The date
@@ -117,7 +118,6 @@ class TaskInfo
      */
     public function __construct()
     {
-        $this->creationDate = new \DateTime();
         $this->status = TaskInfo::TASK_WAITING;
     }
 
@@ -161,6 +161,10 @@ class TaskInfo
     {
         if (!is_int($status) || !in_array($status, array(self::TASK_WAITING, self::TASK_RUNNING, self::TASK_FAIL, self::TASK_OVER, self::TASK_DROPPED, self::TASK_SKIPPED))) {
             throw new \InvalidArgumentException('Invalid status');
+        }
+
+        if ($status == TaskInfo::TASK_RUNNING) {
+            $this->executionDate = new \DateTime();
         }
 
         $this->setLastStatusUpdateDate(new \DateTime());
@@ -224,28 +228,21 @@ class TaskInfo
     }
 
     /**
-     * @param \DateTime $creationDate
+     * @param \DateTime $executionDate
      */
-    public function setCreationDate($creationDate)
+    public function setExecutionDate($executionDate)
     {
-        $this->creationDate = $creationDate;
+        $this->executionDate = $executionDate;
     }
 
     /**
      * @return \DateTime
      */
-    public function getCreationDate()
+    public function getExecutionDate()
     {
-        return $this->creationDate;
+        return $this->executionDate;
     }
 
-    /**
-     * @param \DateTime $lastStatusUpdateDate
-     */
-    public function setLastStatusUpdateDate($lastStatusUpdateDate)
-    {
-        $this->lastStatusUpdateDate = $lastStatusUpdateDate;
-    }
 
     /**
      * @return \DateTime

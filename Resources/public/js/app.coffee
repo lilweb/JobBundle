@@ -50,7 +50,7 @@ class Task extends Backbone.Model
     defaults:
         id: null
         name: null
-        dateCreation: null
+        dateExecution: null
         dateUpdate: null
         startedBy: null
         status: null

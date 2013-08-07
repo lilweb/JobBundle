@@ -45,7 +45,7 @@ class TaskInfoRepository extends EntityRepository
             ->where('ti.status = :status')
             ->andWhere('ti.ordre = (SELECT count(ti2.id) FROM Lilweb\JobBundle\Entity\TaskInfo ti2 where ti.jobInfo = ti2.jobInfo AND ti2.status = 2 AND ti2.ordre < ti.ordre)')
             ->setParameter('status', TaskInfo::TASK_WAITING)
-            ->orderBy('ti.creationDate', 'ASC')
+            ->orderBy('ti.id', 'ASC')
             ->getQuery()
             ->getResult();
     }

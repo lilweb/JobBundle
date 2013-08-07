@@ -43,7 +43,7 @@ class JobInfo
      *      orphanRemoval = true
      * )
      *
-     * @ORM\OrderBy({"creationDate" = "ASC"})
+     * @ORM\OrderBy({"ordre" = "ASC"})
      */
     private $taskInfos;
 

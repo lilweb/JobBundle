@@ -1,7 +1,7 @@
 {
     "id" : {{ task.id }},
     "name" : "{{ task.name }}",
-    "dateCreation" : {{ task.creationDate | date('U') }},
+    "dateExecution" : {{ task.executionDate | date('U') }},
     "dateUpdate" : {{ task.lastStatusUpdateDate | date('U') }},
     "status" : "{{ task.status }}",
     "message" : "{{ task.infoMsg }}"

@@ -95,7 +95,7 @@
     <script id="taskTemplate" type="text/template">
 
         <div class="date">
-            <small><%= moment.unix(dateCreation).format("H:mm") %> - </small>
+            <small><%= moment.unix(dateUpdate).format("H:mm") %> - </small>
         </div>
 
         <% if (status == 0) { %>
@@ -114,6 +114,11 @@
             <div class="infos">
         <% } %>
             <div class="params">
+
+                <% if (dateUpdate != null && dateExecution != null) { %>
+                    <i><%=  moment.unix(dateExecution).from(moment.unix(dateUpdate), true) %></i>
+                <% } %>
+
                 <a href="#" class="message">
                     <% if (message != "") { %>
                         <i title="Message d'erreur" class="icon-warning-sign"></i>

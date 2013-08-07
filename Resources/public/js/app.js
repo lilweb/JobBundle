@@ -82,7 +82,7 @@
     Task.prototype.defaults = {
       id: null,
       name: null,
-      dateCreation: null,
+      dateExecution: null,
       dateUpdate: null,
       startedBy: null,
       status: null,
