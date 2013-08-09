@@ -38,6 +38,7 @@ class JobInfoRepository extends EntityRepository
             ->andWhere('j.creationDate <= :fin')
             ->setParameter('debut', $debutJournee)
             ->setParameter('fin', $finJournee)
+            ->orderBy('j.creationDate', 'asc')
             ->getQuery()
             ->getResult();
     }
