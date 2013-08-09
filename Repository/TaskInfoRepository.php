@@ -45,7 +45,7 @@ class TaskInfoRepository extends EntityRepository
             ->join('ti.jobInfo', 'j')
             ->where('ti.status = :status')
             ->setParameter('status', TaskInfo::TASK_WAITING)
-            ->orderBy('j.creationDate')
+            ->orderBy('j.id')
             ->addOrderBy('ti.ordre')
             ->getQuery()
             ->getResult();
