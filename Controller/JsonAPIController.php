@@ -112,6 +112,7 @@ class JsonAPIController extends Controller
     {
         foreach ($jobInfo->getTaskInfos() as $taskInfo) {
             $taskInfo->setStatus(TaskInfo::TASK_WAITING);
+            $taskInfo->setInfoMsg('');
         }
 
         $this->getDoctrine()->getManager()->flush();
@@ -150,6 +151,7 @@ class JsonAPIController extends Controller
         foreach ($jobInfo->getTaskInfos() as $task) {
             if ($task->getOrdre() >= $taskInfo->getOrdre()) {
                 $task->setStatus(TaskInfo::TASK_WAITING);
+                $task->setInfoMsg('');
             }
         }
 
