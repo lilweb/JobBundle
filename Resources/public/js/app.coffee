@@ -68,7 +68,7 @@ class JobsCollection extends Backbone.Collection
 
     initialize: (date) ->
         this.date = date
-        
+
     url: ->
         if this.date != null
             baseUrl + "/api/v1/jobs/" + this.date.getFullYear() + "/" + (this.date.getMonth() + 1) + "/" + this.date.getDate() + "/list.json"
@@ -114,10 +114,14 @@ class TaskView extends Backbone.View
         tmpl = _.template($("#taskTemplate").html())
         $("#task-" + this.id).html(tmpl(this.toJSON()))
 
-    restartTask: ->
+    restartTask: (event) ->
+        event.stopPropagation()
+        event.preventDefault()
         $.get baseUrl + "/api/v1/task/restart/" + this.model.toJSON().id
 
-    skipTask: ->
+    skipTask: (event) ->
+        event.stopPropagation()
+        event.preventDefault()
         $.get baseUrl + "/api/v1/task/skip/" + this.model.toJSON().id
 
     showMessage: ->
@@ -168,6 +172,8 @@ class JobView extends Backbone.View
         $("#jobs-" + this.model.id).html(tmpl(this.model.toJSON()))
 
     afficherTasks: (event) ->
+        event.stopPropagation()
+        event.preventDefault()
         if not this.tasksView?
             id = $(event.currentTarget).closest("div.infos").data("id")
             this.tasksView = new TasksView
@@ -178,6 +184,7 @@ class JobView extends Backbone.View
             this.$el.next("ul.tasks").remove()
             this.tasksView = null
             this.$el.toggleClass "open"
+
 
     restartJob: ->
         $.get baseUrl + "/api/v1/jobs/restart/" + this.model.toJSON().id

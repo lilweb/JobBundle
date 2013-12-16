@@ -182,11 +182,15 @@
       return $("#task-" + this.id).html(tmpl(this.toJSON()));
     };
 
-    TaskView.prototype.restartTask = function() {
+    TaskView.prototype.restartTask = function(event) {
+      event.stopPropagation();
+      event.preventDefault();
       return $.get(baseUrl + "/api/v1/task/restart/" + this.model.toJSON().id);
     };
 
-    TaskView.prototype.skipTask = function() {
+    TaskView.prototype.skipTask = function(event) {
+      event.stopPropagation();
+      event.preventDefault();
       return $.get(baseUrl + "/api/v1/task/skip/" + this.model.toJSON().id);
     };
 
@@ -275,6 +279,8 @@
 
     JobView.prototype.afficherTasks = function(event) {
       var id;
+      event.stopPropagation();
+      event.preventDefault();
       if (this.tasksView == null) {
         id = $(event.currentTarget).closest("div.infos").data("id");
         this.tasksView = new TasksView;
